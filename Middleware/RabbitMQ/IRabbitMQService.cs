@@ -3,7 +3,7 @@
     public interface IRabbitMQService : IDisposable
     {
         public void CloseConnection();
-        public void SendMessage(string queueName, string message);
-        public void ReceiveMessage(string queueName, Action<string> messageHandler);
+        public void PublishDirect(string queueName, string RouteKey, string message);
+        public void PublishFanout(string queueName, string message);
     }
 }

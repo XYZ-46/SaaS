@@ -5,16 +5,11 @@ using System.Text.Json;
 
 namespace Middleware.Logger
 {
-    public class SinkRabbitMQ : ILogEventSink
+    public class SinkRabbitMQ(IRabbitMQService rabbitMQService, IFormatProvider formatProvider) : ILogEventSink
     {
-        private readonly IFormatProvider _formatProvider;
-        private readonly IRabbitMQService _rabbitMQService;
+        private readonly IFormatProvider _formatProvider = formatProvider;
+        private readonly IRabbitMQService _rabbitMQService = rabbitMQService;
 
-        public SinkRabbitMQ(IRabbitMQService rabbitMQService, IFormatProvider formatProvider)
-        {
-            _formatProvider = formatProvider;
-            _rabbitMQService = rabbitMQService;
-        }
         public void Emit(LogEvent logEvent)
         {
             var objLog = new Dictionary<string, string>
@@ -28,7 +23,7 @@ namespace Middleware.Logger
             }
             objLog.Add("message", logEvent.RenderMessage(_formatProvider));
 
-            _rabbitMQService.SendMessage("Logs", JsonSerializer.Serialize(objLog));
+            _rabbitMQService.PublishFanout("LogApps-exchange", JsonSerializer.Serialize(objLog));
 
             Console.ForegroundColor = ConsoleColor.Green;
             foreach (var properti in objLog)

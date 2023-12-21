@@ -1,9 +1,9 @@
-using Microsoft.Extensions.Configuration;
 using Middleware.RabbitMQ;
 using Serilog;
 using System.Reflection;
 using Middleware.Logger;
 using System.Net;
+using AppConfiguration;
 
 var _config = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
-builder.Services.Configure<RabbitMQClientConfiguration>(_config.GetSection("Middleware:SinkRabbitMQ"));
+builder.Services.Configure<RabbitMQClientConfig>(_config.GetSection("Middleware:SinkRabbitMQ"));
 builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
 
 builder.Host.UseSerilog((hostBuilderContext, service, loggerConfig) =>
@@ -50,7 +50,6 @@ Log
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
 
 app.Run();
 

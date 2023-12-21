@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.IO;
 using Serilog;
+using System.Text.Json;
 
 namespace Middleware.Logger
 {
@@ -13,7 +14,6 @@ namespace Middleware.Logger
         {
             await LogRequest(context);
             await this._next(context);
-
         }
 
         private async Task LogRequest(HttpContext context)
@@ -26,6 +26,7 @@ namespace Middleware.Logger
                 .ForContext("InfoType", "UserRequest")
                 .ForContext("IpRemote", context.Connection.RemoteIpAddress)
                 .ForContext("IpForwaded", context.Request.Headers["X-Forwarded-For"].ToString())
+                .ForContext("Headers", JsonSerializer.Serialize(context.Request.Headers))
                 .ForContext("ContentType", context.Request.ContentType)
                 .ForContext("QueryString", context.Request.QueryString)
                 .ForContext("ReqBody", ReadStreamInChunks(requestStream))
