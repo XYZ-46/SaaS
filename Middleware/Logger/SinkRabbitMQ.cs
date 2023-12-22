@@ -9,19 +9,12 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Middleware.Logger
 {
-    public class SinkRabbitMQ
-        : ILogEventSink
+    public class SinkRabbitMQ(IRabbitMQConnectionFactory rabbitMQService, IFormatProvider formatProvider, SinkRabbitMQConfig sinkConfig)
+                : ILogEventSink
     {
-        private readonly IFormatProvider _formatProvider;
-        private readonly IRabbitMQConnectionFactory _rabbitMQService;
-        private readonly SinkRabbitMQConfig _sinkRabbitmqConfig;
-
-        public SinkRabbitMQ(IRabbitMQConnectionFactory rabbitMQService, IFormatProvider formatProvider, SinkRabbitMQConfig sinkConfig)
-        {
-            _sinkRabbitmqConfig = sinkConfig;
-            _formatProvider = formatProvider;
-            _rabbitMQService = rabbitMQService;
-        }
+        private readonly IFormatProvider _formatProvider = formatProvider;
+        private readonly IRabbitMQConnectionFactory _rabbitMQService = rabbitMQService;
+        private readonly SinkRabbitMQConfig _sinkRabbitmqConfig = sinkConfig;
 
         public void Emit(LogEvent logEvent)
         {
@@ -39,7 +32,6 @@ namespace Middleware.Logger
                 var helper = new RabbitMQPubSub(model, _sinkRabbitmqConfig);
                 helper.PushMessageIntoQueue(objLog);
             }
-            //_rabbitMQService.PublishMessage(objLog, _sinkRabbitmqConfig.Queue);
 
             Console.ForegroundColor = ConsoleColor.Green;
             foreach (var properti in objLog)

@@ -5,23 +5,18 @@ using System.Text.Json;
 
 namespace Middleware.RabbitMQ
 {
-    public class RabbitMQPubSub
+    public class RabbitMQPubSub(IModel model, MessageRabbitMQConfig messageConfig)
     {
-        private readonly IModel _model;
-        private readonly MessageRabbitMQConfig _messageConfig;
+        private readonly IModel _model = model;
+        private readonly MessageRabbitMQConfig _messageConfig = messageConfig;
 
-        public RabbitMQPubSub(IModel model, MessageRabbitMQConfig messageConfig)
+        public void SetupQueue(MessageRabbitMQConfig? msgConfig = null)
         {
-            _model = model;
-            _messageConfig = messageConfig;
-        }
+            msgConfig ??= this._messageConfig;
 
-
-        public void SetupQueue()
-        {
-            _model.ExchangeDeclare(_messageConfig.ExchangeName, _messageConfig.ExchangeType);
-            _model.QueueDeclare(_messageConfig.Queue, true, false, false, null);
-            _model.QueueBind(_messageConfig.Queue, _messageConfig.ExchangeName, _messageConfig.RouteKey);
+            _model.ExchangeDeclare(msgConfig.ExchangeName, msgConfig.ExchangeType);
+            _model.QueueDeclare(msgConfig.Queue, true, false, false, null);
+            _model.QueueBind(msgConfig.Queue, msgConfig.ExchangeName, msgConfig.RouteKey);
         }
 
         public void PushMessageIntoQueue(byte[] message)
@@ -42,15 +37,18 @@ namespace Middleware.RabbitMQ
             _model.BasicPublish(_messageConfig.ExchangeName, _messageConfig.RouteKey, null, Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message)));
         }
 
-        //public byte[] ReadMessageFromQueue(string queueName)
-        //{
-        //    SetupQueue();
-        //    byte[] message;
-        //    var data = _model.BasicGet(queueName, false);
-        //    message = data.Body;
-        //    _model.BasicAck(data.DeliveryTag, false);
-        //    return message;
-        //}
+        public string? ReadMessageFromQueue(MessageRabbitMQConfig msgConfig)
+        {
+            SetupQueue(msgConfig);
+            string message;
+            var data = _model.BasicGet(msgConfig.Queue, false);
+
+            if (data != null) return null;
+
+            message = Encoding.UTF8.GetString(data!.Body.ToArray());
+            _model.BasicAck(data.DeliveryTag, false);
+            return message;
+        }
 
     }
 }
