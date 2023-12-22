@@ -1,6 +1,8 @@
 ﻿using Serilog.Configuration;
 using Serilog;
 using Middleware.RabbitMQ;
+using AppConfiguration;
+using Microsoft.Extensions.Options;
 
 namespace Middleware.Logger
 {
@@ -9,9 +11,12 @@ namespace Middleware.Logger
         public static LoggerConfiguration SinkRabbitMQ(
                   this LoggerSinkConfiguration loggerConfiguration,
                   IRabbitMQService rabbitMQService,
+                  Action<SinkRabbitMQConfig> configure,
                   IFormatProvider? formatProvider = null)
         {
-            return loggerConfiguration.Sink(new SinkRabbitMQ(rabbitMQService, formatProvider));
+            var sinkConfig = new SinkRabbitMQConfig();
+            configure(sinkConfig);
+            return loggerConfiguration.Sink(new SinkRabbitMQ(rabbitMQService, formatProvider,sinkConfig));
         }
     }
 }

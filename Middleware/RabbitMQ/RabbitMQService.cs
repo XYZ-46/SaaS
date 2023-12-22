@@ -1,7 +1,7 @@
 ﻿using AppConfiguration;
-using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using System.Text;
+using System.Text.Json;
 
 namespace Middleware.RabbitMQ
 {
@@ -9,14 +9,15 @@ namespace Middleware.RabbitMQ
     {
         private readonly IConnection _connection;
         private readonly IModel _channel;
-        private readonly RabbitMQClientConfig _rabbitClientConfig;
+        private RabbitMQClientConfig _rabbitClientConfig;
+        private MessageRabbitMQConfig _sinkRabbitMQConfig;
 
-        public RabbitMQService(IOptionsMonitor<RabbitMQClientConfig> clientConfig)
+        public RabbitMQService()
         {
-            _rabbitClientConfig = clientConfig.CurrentValue;
+
             var factory = new ConnectionFactory()
             {
-                HostName = _rabbitClientConfig.Hostnames, // RabbitMQ server address
+                HostName = _rabbitClientConfig!.Hostnames, // RabbitMQ server address
                 Port = _rabbitClientConfig.Port,          // Default port
                 UserName = _rabbitClientConfig.Username,  // Default username
                 Password = _rabbitClientConfig.Password   // Default password
@@ -26,22 +27,29 @@ namespace Middleware.RabbitMQ
             _channel = _connection.CreateModel();
         }
 
-        public void CloseConnection()
+        public void SetupQueue(string queueName)
         {
-            if (_channel.IsOpen) _channel.Close();
-            if (_connection.IsOpen) _connection.Close();
+            _channel.ExchangeDeclare(_sinkRabbitMQConfig.ExchangeName, _sinkRabbitMQConfig.ExchangeType);
+            _channel.QueueDeclare(queueName, true, false, false, null);
+            _channel.QueueBind(queueName, _sinkRabbitMQConfig.ExchangeName, _sinkRabbitMQConfig.RouteKey);
         }
 
-        public void PublishDirect(string queueName, string RouteKey, string message)
+        public void PublishMessage(byte[] message, string queue)
         {
-            var body = Encoding.UTF8.GetBytes(message);
-            _channel.BasicPublish(queueName, RouteKey, null, body);
+            SetupQueue(queue);
+            _channel.BasicPublish(_sinkRabbitMQConfig.ExchangeName, _sinkRabbitMQConfig.RouteKey, null, message);
         }
 
-        public void PublishFanout(string queueName, string message)
+        public void PublishMessage(string message, string queue)
         {
-            var body = Encoding.UTF8.GetBytes(message);
-            _channel.BasicPublish(queueName, string.Empty, null, body);
+            SetupQueue(queue);
+            _channel.BasicPublish(_sinkRabbitMQConfig.ExchangeName, _sinkRabbitMQConfig.RouteKey, null, Encoding.UTF8.GetBytes(message));
+        }
+
+        public void PublishMessage(object message, string queue)
+        {
+            SetupQueue(queue);
+            _channel.BasicPublish(_sinkRabbitMQConfig.ExchangeName, _sinkRabbitMQConfig.RouteKey, null, Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message)));
         }
 
         public void Dispose()
@@ -52,7 +60,6 @@ namespace Middleware.RabbitMQ
 
         protected virtual void Dispose(bool disposing)
         {
-            CloseConnection();
             _channel.Dispose();
             _connection.Dispose();
         }

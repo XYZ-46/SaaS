@@ -4,6 +4,8 @@ using System.Reflection;
 using Middleware.Logger;
 using System.Net;
 using AppConfiguration;
+using Middleware.Database;
+using Microsoft.EntityFrameworkCore;
 
 var _config = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -16,8 +18,10 @@ var _config = new ConfigurationBuilder()
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<DBAppContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HitsDB")));
+
 builder.Services.AddControllers();
-builder.Services.Configure<RabbitMQClientConfig>(_config.GetSection("Middleware:SinkRabbitMQ"));
+builder.Services.Configure<RabbitMQClientConfig>(_config.GetSection("Middleware:RabbitMQClient"));
 builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
 
 builder.Host.UseSerilog((hostBuilderContext, service, loggerConfig) =>
@@ -27,8 +31,15 @@ builder.Host.UseSerilog((hostBuilderContext, service, loggerConfig) =>
         .Enrich.WithProperty("ENV", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"))
         .Enrich.WithProperty("version", _config.GetSection("version").Value)
         .Enrich.WithProperty("ApplicationName", _config.GetSection("ApplicationName").Value)
-        .WriteTo.SinkRabbitMQ(service.GetRequiredService<IRabbitMQService>());
-
+        .WriteTo.SinkRabbitMQ(service.GetRequiredService<IRabbitMQService>(), x =>
+        {
+            var sinkConfig = _config.GetSection("Middleware:SinkRabbitMQ").Get<SinkRabbitMQConfig>();
+            x.ExchangeName = sinkConfig!.ExchangeName;
+            x.ExchangeType = sinkConfig.ExchangeType;
+            x.Queue = sinkConfig.Queue;
+            x.Durable = sinkConfig.Durable;
+            x.AutoDelete = sinkConfig.AutoDelete;
+        });
 });
 
 var app = builder.Build();
