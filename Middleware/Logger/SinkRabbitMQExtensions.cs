@@ -10,7 +10,7 @@ namespace Middleware.Logger
     {
         public static LoggerConfiguration SinkRabbitMQ(
                   this LoggerSinkConfiguration loggerConfiguration,
-                  IRabbitMQService rabbitMQService,
+                  IRabbitMQConnectionFactory rabbitMQService,
                   Action<SinkRabbitMQConfig> configure,
                   IFormatProvider? formatProvider = null)
         {

@@ -22,7 +22,7 @@ builder.Services.AddDbContext<DBAppContext>(options => options.UseSqlServer(buil
 
 builder.Services.AddControllers();
 builder.Services.Configure<RabbitMQClientConfig>(_config.GetSection("Middleware:RabbitMQClient"));
-builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
+builder.Services.AddSingleton<IRabbitMQConnectionFactory, RabbitMQConnectionFactoryService>();
 
 builder.Host.UseSerilog((hostBuilderContext, service, loggerConfig) =>
 {
@@ -31,7 +31,7 @@ builder.Host.UseSerilog((hostBuilderContext, service, loggerConfig) =>
         .Enrich.WithProperty("ENV", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"))
         .Enrich.WithProperty("version", _config.GetSection("version").Value)
         .Enrich.WithProperty("ApplicationName", _config.GetSection("ApplicationName").Value)
-        .WriteTo.SinkRabbitMQ(service.GetRequiredService<IRabbitMQService>(), x =>
+        .WriteTo.SinkRabbitMQ(service.GetRequiredService<IRabbitMQConnectionFactory>(), x =>
         {
             var sinkConfig = _config.GetSection("Middleware:SinkRabbitMQ").Get<SinkRabbitMQConfig>();
             x.ExchangeName = sinkConfig!.ExchangeName;

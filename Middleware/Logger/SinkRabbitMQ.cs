@@ -1,9 +1,11 @@
 ﻿using AppConfiguration;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Middleware.RabbitMQ;
 using Serilog.Core;
 using Serilog.Events;
 using System.Text.Json;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Middleware.Logger
 {
@@ -11,10 +13,10 @@ namespace Middleware.Logger
         : ILogEventSink
     {
         private readonly IFormatProvider _formatProvider;
-        private readonly IRabbitMQService _rabbitMQService;
+        private readonly IRabbitMQConnectionFactory _rabbitMQService;
         private readonly SinkRabbitMQConfig _sinkRabbitmqConfig;
 
-        public SinkRabbitMQ(IRabbitMQService rabbitMQService, IFormatProvider formatProvider, SinkRabbitMQConfig sinkConfig)
+        public SinkRabbitMQ(IRabbitMQConnectionFactory rabbitMQService, IFormatProvider formatProvider, SinkRabbitMQConfig sinkConfig)
         {
             _sinkRabbitmqConfig = sinkConfig;
             _formatProvider = formatProvider;
@@ -31,7 +33,13 @@ namespace Middleware.Logger
             foreach (var properti in logEvent.Properties) objLog.Add(properti.Key, properti.Value.ToString());
             objLog.Add("message", logEvent.RenderMessage(_formatProvider));
 
-            _rabbitMQService.PublishMessage(objLog, _sinkRabbitmqConfig.Queue);
+            var _rabbitConnection = _rabbitMQService.CreateConnection();
+            using (var model = _rabbitConnection.CreateModel())
+            {
+                var helper = new RabbitMQPubSub(model, _sinkRabbitmqConfig);
+                helper.PushMessageIntoQueue(objLog);
+            }
+            //_rabbitMQService.PublishMessage(objLog, _sinkRabbitmqConfig.Queue);
 
             Console.ForegroundColor = ConsoleColor.Green;
             foreach (var properti in objLog)

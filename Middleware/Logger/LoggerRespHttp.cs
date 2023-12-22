@@ -3,16 +3,14 @@ using Serilog;
 
 namespace Middleware.Logger
 {
-    public class LoggerRespHttp(RequestDelegate requestProcess, RequestDelegate next)
+    public class LoggerRespHttp(RequestDelegate requestProcess)
     {
         private readonly RequestDelegate requestProcess = requestProcess;
         private readonly RecyclableMemoryStreamManager _recyclableMem = new();
-        private readonly RequestDelegate _next = next;
 
         public async Task Invoke(HttpContext context)
         {
             await LogResponse(context);
-            await this._next(context);
         }
 
         private async Task LogResponse(HttpContext context)
