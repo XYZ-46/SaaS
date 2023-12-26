@@ -1,4 +1,5 @@
 ﻿using AppConfiguration;
+using InterfaceProject.IMiddleware;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Middleware.RabbitMQ;
@@ -9,12 +10,11 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Middleware.Logger
 {
-    public class SinkRabbitMQ(IRabbitMQConnectionFactory rabbitMQService, IFormatProvider formatProvider, SinkRabbitMQConfig sinkConfig)
+    public class SinkRabbitMQ(IRabbitMQService rabbitMQService, IFormatProvider formatProvider)
                 : ILogEventSink
     {
         private readonly IFormatProvider _formatProvider = formatProvider;
-        private readonly IRabbitMQConnectionFactory _rabbitMQService = rabbitMQService;
-        private readonly SinkRabbitMQConfig _sinkRabbitmqConfig = sinkConfig;
+        private readonly IRabbitMQService _rabbitMQService = rabbitMQService;
 
         public void Emit(LogEvent logEvent)
         {
@@ -26,12 +26,7 @@ namespace Middleware.Logger
             foreach (var properti in logEvent.Properties) objLog.Add(properti.Key, properti.Value.ToString());
             objLog.Add("message", logEvent.RenderMessage(_formatProvider));
 
-            var _rabbitConnection = _rabbitMQService.CreateConnection();
-            using (var model = _rabbitConnection.CreateModel())
-            {
-                var helper = new RabbitMQPubSub(model, _sinkRabbitmqConfig);
-                helper.PushMessageIntoQueue(objLog);
-            }
+            rabbitMQService.PushMessageIntoQueue(objLog);
 
             Console.ForegroundColor = ConsoleColor.Green;
             foreach (var properti in objLog)

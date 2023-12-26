@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AppConfiguration\AppConfiguration.csproj" />
+    <ProjectReference Include="..\InterfaceProject\InterfaceProject.csproj" />
     <ProjectReference Include="..\Middleware\Middleware.csproj" />
   </ItemGroup>
 

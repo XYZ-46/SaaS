@@ -6,6 +6,7 @@ using System.Net;
 using AppConfiguration;
 using Middleware.Database;
 using Microsoft.EntityFrameworkCore;
+using InterfaceProject.IMiddleware;
 
 var _config = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -21,8 +22,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DBAppContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HitsDB")));
 
 builder.Services.AddControllers();
-builder.Services.Configure<RabbitMQClientConfig>(_config.GetSection("Middleware:RabbitMQClient"));
-builder.Services.AddSingleton<IRabbitMQConnectionFactory, RabbitMQConnectionFactoryService>();
+builder.Services.AddSingleton<IRabbitMQService>(x =>{
+    var _rabbitmqClientConfig = _config.GetSection("Middleware:RabbitMQClient").Get<RabbitMQClientConfig>();
+    var _sinkMessageConfig = _config.GetSection("Middleware:SinkRabbitMQ").Get<MessageRabbitMQConfig>();
+
+    var rabbitService = new RabbitMQService(_rabbitmqClientConfig!, _sinkMessageConfig!);
+    return rabbitService;
+});
 
 builder.Host.UseSerilog((hostBuilderContext, service, loggerConfig) =>
 {
@@ -31,15 +37,7 @@ builder.Host.UseSerilog((hostBuilderContext, service, loggerConfig) =>
         .Enrich.WithProperty("ENV", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"))
         .Enrich.WithProperty("version", _config.GetSection("version").Value)
         .Enrich.WithProperty("ApplicationName", _config.GetSection("ApplicationName").Value)
-        .WriteTo.SinkRabbitMQ(service.GetRequiredService<IRabbitMQConnectionFactory>(), x =>
-        {
-            var sinkConfig = _config.GetSection("Middleware:SinkRabbitMQ").Get<SinkRabbitMQConfig>();
-            x.ExchangeName = sinkConfig!.ExchangeName;
-            x.ExchangeType = sinkConfig.ExchangeType;
-            x.Queue = sinkConfig.Queue;
-            x.Durable = sinkConfig.Durable;
-            x.AutoDelete = sinkConfig.AutoDelete;
-        });
+        .WriteTo.SinkRabbitMQ(service.GetRequiredService<IRabbitMQService>());
 });
 
 var app = builder.Build();

@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AppConfiguration\AppConfiguration.csproj" />
+    <ProjectReference Include="..\InterfaceProject\InterfaceProject.csproj" />
   </ItemGroup>
 
 </Project>
