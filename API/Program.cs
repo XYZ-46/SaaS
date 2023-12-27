@@ -6,7 +6,7 @@ using System.Net;
 using AppConfiguration;
 using Middleware.Database;
 using Microsoft.EntityFrameworkCore;
-using InterfaceProject.IMiddleware;
+using InterfaceProject.Middleware;
 
 var _config = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
@@ -22,7 +22,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DBAppContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("HitsDB")));
 
 builder.Services.AddControllers();
-builder.Services.AddSingleton<IRabbitMQService>(x =>{
+builder.Services.AddSingleton<IRabbitMQService>(x =>
+{
     var _rabbitmqClientConfig = _config.GetSection("Middleware:RabbitMQClient").Get<RabbitMQClientConfig>();
     var _sinkMessageConfig = _config.GetSection("Middleware:SinkRabbitMQ").Get<MessageRabbitMQConfig>();
 

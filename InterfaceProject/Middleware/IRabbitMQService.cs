@@ -1,6 +1,6 @@
 ﻿using AppConfiguration;
 
-namespace InterfaceProject.IMiddleware
+namespace InterfaceProject.Middleware
 {
     public interface IRabbitMQService : IDisposable
     {
@@ -8,6 +8,6 @@ namespace InterfaceProject.IMiddleware
         void SetupQueue(MessageRabbitMQConfig messageConfig);
         void PushMessageIntoQueue(byte[] message);
         void PushMessageIntoQueue(string message);
-        void PushMessageIntoQueue(object message);
+        void PushMessageIntoQueue<T>(T message);
     }
 }

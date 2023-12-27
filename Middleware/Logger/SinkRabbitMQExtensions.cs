@@ -1,7 +1,7 @@
 ﻿using Serilog.Configuration;
 using Serilog;
 using AppConfiguration;
-using InterfaceProject.IMiddleware;
+using InterfaceProject.Middleware;
 
 namespace Middleware.Logger
 {

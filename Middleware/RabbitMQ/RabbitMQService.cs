@@ -1,7 +1,5 @@
 ﻿using AppConfiguration;
-using InterfaceProject.IMiddleware;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using InterfaceProject.Middleware;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
@@ -60,7 +58,7 @@ namespace Middleware.RabbitMQ
             _channel.BasicPublish(_messageConfig.ExchangeName, _messageConfig.RouteKey, null, Encoding.UTF8.GetBytes(message));
         }
 
-        public void PushMessageIntoQueue(object message)
+        public void PushMessageIntoQueue<T>(T message)
         {
             _channel.BasicPublish(_messageConfig.ExchangeName, _messageConfig.RouteKey, null, Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message)));
         }
