@@ -43,7 +43,7 @@ jobs:
         env:
           cache-name: nuget-package-cache
         with:
-          path: ~/.nuget/packages
+          path: ${{ env.DOTNET_INSTALL_DIR }}
           key: ${{ runner.os }}-${{ env.cache-name }}          
       - name: Restore Nuget dependencies
         if: ${{ steps.nuget-packages.outputs.cache-hit == 'true' }}
