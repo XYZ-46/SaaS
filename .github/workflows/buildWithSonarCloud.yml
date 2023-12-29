@@ -9,6 +9,8 @@ jobs:
   build:
     name: Build and analyze
     runs-on: windows-latest
+    env:
+      NUGET_INSTALL_DIR: '.\.nuget'
     steps:
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -43,7 +45,7 @@ jobs:
         env:
           cache-name: nuget-package-cache
         with:
-          path: ${{ env.DOTNET_INSTALL_DIR }}
+          path: ${{ env.NUGET_INSTALL_DIR }}
           key: ${{ runner.os }}-${{ env.cache-name }}          
       - name: Restore Nuget dependencies
         if:  steps.nuget-packages.outputs.cache-hit != 'true'         
