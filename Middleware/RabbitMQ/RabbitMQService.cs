@@ -25,6 +25,8 @@ namespace Middleware.RabbitMQ
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
+
+            SetupQueue(this._messageConfig);
         }
 
         public bool IsSameMessageConfig(MessageRabbitMQConfig messageConfig)
