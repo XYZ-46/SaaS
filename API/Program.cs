@@ -7,9 +7,11 @@ using AppConfiguration;
 using Middleware.Database;
 using Microsoft.EntityFrameworkCore;
 using InterfaceProject.Middleware;
+using System.Diagnostics.CodeAnalysis;
 
 namespace API
 {
+    [ExcludeFromCodeCoverage]
     public static partial class Program
     {
         public static void Main(string[] args)
