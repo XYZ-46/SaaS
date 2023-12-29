@@ -46,8 +46,7 @@ jobs:
           path: ${{ env.DOTNET_INSTALL_DIR }}
           key: ${{ runner.os }}-${{ env.cache-name }}          
       - name: Restore Nuget dependencies
-        if: ${{ steps.nuget-packages.outputs.cache-hit == 'true' }}
-        continue-on-error: true
+        if:  steps.nuget-packages.outputs.cache-hit != 'true'         
         run: dotnet restore      
       - name: Build and analyze
         env:
