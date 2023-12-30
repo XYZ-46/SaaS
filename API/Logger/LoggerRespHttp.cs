@@ -1,7 +1,7 @@
 ﻿using Microsoft.IO;
 using Serilog;
 
-namespace Middleware.Logger
+namespace API.Logger
 {
     public class LoggerRespHttp(RequestDelegate requestProcess)
     {

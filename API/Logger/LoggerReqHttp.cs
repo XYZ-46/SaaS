@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.IO;
+﻿using Microsoft.IO;
 using Serilog;
 using System.Text.Json;
 
-namespace Middleware.Logger
+namespace API.Logger
 {
     public class LoggerReqHttp(RequestDelegate next)
     {

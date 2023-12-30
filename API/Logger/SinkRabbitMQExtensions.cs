@@ -1,9 +1,8 @@
 ﻿using Serilog.Configuration;
 using Serilog;
-using AppConfiguration;
-using InterfaceProject.Middleware;
+using InterfaceProject.Service;
 
-namespace Middleware.Logger
+namespace API.Logger
 {
     public static class SinkRabbitMQExtensions
     {

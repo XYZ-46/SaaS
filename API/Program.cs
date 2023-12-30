@@ -1,13 +1,13 @@
-using Middleware.RabbitMQ;
 using Serilog;
 using System.Reflection;
-using Middleware.Logger;
 using System.Net;
 using AppConfiguration;
-using Middleware.Database;
 using Microsoft.EntityFrameworkCore;
-using InterfaceProject.Middleware;
 using System.Diagnostics.CodeAnalysis;
+using Service.RabbitMQ;
+using Service.Database;
+using API.Logger;
+using InterfaceProject.Service;
 
 namespace API
 {

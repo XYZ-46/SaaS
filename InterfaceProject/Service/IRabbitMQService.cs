@@ -1,6 +1,6 @@
 ﻿using AppConfiguration;
 
-namespace InterfaceProject.Middleware
+namespace InterfaceProject.Service
 {
     public interface IRabbitMQService : IDisposable
     {

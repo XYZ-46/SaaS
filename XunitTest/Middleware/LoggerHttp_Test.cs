@@ -1,15 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder.Extensions;
-using Microsoft.AspNetCore.Http;
-using Middleware.Logger;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Primitives;
+﻿using Microsoft.AspNetCore.Http;
 using FluentAssertions;
 using Serilog;
 using Serilog.Sinks.TestCorrelator;
+using API.Logger;
 
 namespace XunitTest.Middleware
 {

@@ -1,9 +1,8 @@
-﻿using AppConfiguration;
-using InterfaceProject.Middleware;
+﻿using InterfaceProject.Service;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace Middleware.Logger
+namespace API.Logger
 {
     public class SinkRabbitMQ(IRabbitMQService rabbitMQService, IFormatProvider formatProvider)
                 : ILogEventSink
