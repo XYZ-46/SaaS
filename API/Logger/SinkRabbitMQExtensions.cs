@@ -9,9 +9,10 @@ namespace API.Logger
         public static LoggerConfiguration SinkRabbitMQ(
                   this LoggerSinkConfiguration loggerConfiguration,
                   IRabbitMQService rabbitMQService,
+                  bool IsProduction,
                   IFormatProvider? formatProvider = null)
         {
-            return loggerConfiguration.Sink(new SinkRabbitMQ(rabbitMQService, formatProvider!));
+            return loggerConfiguration.Sink(new SinkRabbitMQ(rabbitMQService, formatProvider!, IsProduction));
         }
     }
 }

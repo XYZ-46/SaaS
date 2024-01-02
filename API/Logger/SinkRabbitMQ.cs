@@ -4,7 +4,7 @@ using Serilog.Events;
 
 namespace API.Logger
 {
-    public class SinkRabbitMQ(IRabbitMQService rabbitMQService, IFormatProvider formatProvider)
+    public class SinkRabbitMQ(IRabbitMQService rabbitMQService, IFormatProvider formatProvider, bool IsProduction )
                 : ILogEventSink
     {
         private readonly IFormatProvider _formatProvider = formatProvider;
@@ -22,10 +22,13 @@ namespace API.Logger
 
             _rabbitMQService.PushMessageIntoQueue(objLog);
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            foreach (var properti in objLog)
+            if (!IsProduction)
             {
-                Console.WriteLine($"{properti.Key} = {properti.Value}");
+                Console.ForegroundColor = ConsoleColor.Green;
+                foreach (var properti in objLog)
+                {
+                    Console.WriteLine($"{properti.Key} = {properti.Value}");
+                }
             }
 
         }
