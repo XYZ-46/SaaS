@@ -14,8 +14,12 @@ namespace API.Logger
         {
             var objLog = new Dictionary<string, string>
             {
-                { "date", logEvent.Timestamp.UtcDateTime.ToString("o") }
+                { "date", logEvent.Timestamp.UtcDateTime.ToString("o") },
+                { "level", logEvent.Level.ToString() }
             };
+
+            if (logEvent.TraceId.HasValue) objLog.Add("TraceId", logEvent.TraceId.Value.ToString());
+            if (logEvent.SpanId.HasValue) objLog.Add("SpanId", logEvent.SpanId.Value.ToString());
 
             foreach (var properti in logEvent.Properties) objLog.Add(properti.Key, properti.Value.ToString().Trim('"'));
             objLog.Add("message", logEvent.RenderMessage(_formatProvider));
