@@ -16,7 +16,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterfaceProject", "Interfa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{BD4B5072-413A-4608-93C7-16EEFB18BECC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataEntity", "DataEntity\DataEntity.csproj", "{980B1055-5BC1-4498-9FFB-6AB76AE69EC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataEntity", "DataEntity\DataEntity.csproj", "{980B1055-5BC1-4498-9FFB-6AB76AE69EC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{0A1094EF-4136-4AA4-98F3-9FAB79B342C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +76,14 @@ Global
 		{980B1055-5BC1-4498-9FFB-6AB76AE69EC9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{980B1055-5BC1-4498-9FFB-6AB76AE69EC9}.Release|x64.ActiveCfg = Release|Any CPU
 		{980B1055-5BC1-4498-9FFB-6AB76AE69EC9}.Release|x64.Build.0 = Release|Any CPU
+		{0A1094EF-4136-4AA4-98F3-9FAB79B342C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A1094EF-4136-4AA4-98F3-9FAB79B342C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A1094EF-4136-4AA4-98F3-9FAB79B342C3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0A1094EF-4136-4AA4-98F3-9FAB79B342C3}.Debug|x64.Build.0 = Debug|Any CPU
+		{0A1094EF-4136-4AA4-98F3-9FAB79B342C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A1094EF-4136-4AA4-98F3-9FAB79B342C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A1094EF-4136-4AA4-98F3-9FAB79B342C3}.Release|x64.ActiveCfg = Release|Any CPU
+		{0A1094EF-4136-4AA4-98F3-9FAB79B342C3}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
