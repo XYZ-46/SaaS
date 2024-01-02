@@ -77,6 +77,7 @@ namespace API
             { // App Builder
                 app.UseMiddleware<LoggerReqHttp>();
                 app.UseMiddleware<LoggerRespHttp>();
+                app.UseMiddleware<ErrorHandler>();
                 if (!app.Environment.IsEnvironment("Production"))
                 {
                     app.UseDeveloperExceptionPage();
