@@ -21,7 +21,7 @@ namespace Service
         {
             _jwtSetting = jwtSetting.Value;
         }
-        public string GenerateJwtTokenAsync(UserLoginParam user)
+        public string GenerateJwtTokenAsync(LoginRequest user)
         {
             var SecretKey = Encoding.ASCII.GetBytes(_jwtSetting.Secret);
             var SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(SecretKey), SecurityAlgorithms.HmacSha256);
@@ -49,20 +49,18 @@ namespace Service
             throw new NotImplementedException();
         }
 
-        public RefreshToken generateRefreshToken(string ipAddress)
+        public static RefreshToken GenerateRefreshToken(string ipAddress)
         {
-            using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
+            var randomBytes = new byte[64];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomBytes);
+            return new RefreshToken
             {
-                var randomBytes = new byte[64];
-                rngCryptoServiceProvider.GetBytes(randomBytes);
-                return new RefreshToken
-                {
-                    Token = Convert.ToBase64String(randomBytes),
-                    Expires = DateTime.UtcNow.AddMinutes(2),
-                    Created = DateTime.UtcNow,
-                    CreatedByIp = ipAddress
-                };
-            }
+                Token = Convert.ToBase64String(randomBytes),
+                Expires = DateTime.UtcNow.AddMinutes(2),
+                Created = DateTime.UtcNow,
+                CreatedByIp = ipAddress
+            };
         }
     }
 }

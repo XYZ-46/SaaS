@@ -1,14 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DataEntity.User
+namespace DataEntity
 {
-    public class UserLoginParam
+    public class LoginRequest
     {
-        [Required]
+        [Required(ErrorMessage = "Username is required")]
         public string Username { get; set; } = string.Empty;
-        [Required]
+        [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; } = string.Empty;
-
-
     }
 }
