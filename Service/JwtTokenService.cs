@@ -8,6 +8,7 @@ using System.Text;
 using InterfaceProject.Service;
 using System;
 using System.Security.Cryptography;
+using DataEntity;
 
 
 namespace Service
