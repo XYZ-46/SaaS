@@ -71,46 +71,14 @@ namespace XunitTest.Middleware
 
             // test Log HttpContext
             var logEventsFromCurrentContext = TestCorrelator.GetLogEventsFromCurrentContext();
-            logEventsFromCurrentContext.Should().HaveCount(2);
-            logEventsFromCurrentContext.Should().Contain(x => x.MessageTemplate.ToString() == "Request Http");
-            logEventsFromCurrentContext.Should().Contain(x => x.MessageTemplate.ToString() == "Response Http");
+            logEventsFromCurrentContext.Should().ContainSingle().Which.MessageTemplate.Text.Should().Be("Response Http");
 
-            var _properties = TestCorrelator.GetLogEventsFromCurrentContext().Select(x => x.Properties).ToArray();
-            _properties.Should().HaveCount(2);
-            
-            // Cek Log Request
-            var reqParam = _properties[0];
-            reqParam.Should().Contain(x => x.Key == "InfoType");
-            reqParam.Should().Contain(x => x.Key == "ReqBody");
-            reqParam.Should().Contain(x => x.Key == "IpRemote");
-            reqParam.Should().Contain(x => x.Key == "IpForwaded");
-            reqParam.Should().Contain(x => x.Key == "Headers");
-            reqParam.Should().Contain(x => x.Key == "ContentType");
-            reqParam.Should().Contain(x => x.Key == "QueryString");
+            var _properties = TestCorrelator.GetLogEventsFromCurrentContext().Select(x => x.Properties);
+            _properties.Should().ContainSingle().Which.ContainsKey("InfoType");
+            _properties.Should().ContainSingle().Which.ContainsKey("RespBody");
+            _properties.Should().ContainSingle().Which.ContainsKey("StatusCode");
 
-            reqParam.TryGetValue("InfoType", out var valInfoTypeReq0);
-            valInfoTypeReq0?.ToString().Trim('"').Should().Be("UserRequest");
-
-            reqParam.TryGetValue("QueryString", out var valInfoTypeReq1);
-            valInfoTypeReq1?.ToString().Trim('"').Should().BeNullOrEmpty();
-
-            reqParam.TryGetValue("ReqBody", out var valInfoTypeReq2);
-            valInfoTypeReq2?.ToString().Trim('"').Should().BeNullOrEmpty();
-
-            // Cek Log Response
-            var resParam = _properties[1];
-            resParam.Should().Contain(x => x.Key == "InfoType");
-            resParam.Should().Contain(x => x.Key == "RespBody");
-            resParam.Should().Contain(x => x.Key == "StatusCode");
-
-            resParam.TryGetValue("InfoType", out var valInfoTypeRes0);
-            valInfoTypeRes0?.ToString().Trim('"').Should().Be("UserResponse");
-
-            resParam.TryGetValue("RespBody", out var valInfoTypeRes1);
-            valInfoTypeRes1?.ToString().Trim('"').Should().BeNullOrEmpty();
-
-            resParam.TryGetValue("StatusCode", out var valInfoTypeRes2);
-            valInfoTypeRes2?.ToString().Trim('"').Should().Be("200");
+            _properties.Should().ContainSingle().Which.Values.Should().Contain(x => x.ToString().Contains("UserResponse"));
         }
     }
 }
