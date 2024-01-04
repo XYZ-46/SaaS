@@ -71,14 +71,24 @@ namespace XunitTest.Middleware
 
             // test Log HttpContext
             var logEventsFromCurrentContext = TestCorrelator.GetLogEventsFromCurrentContext();
-            logEventsFromCurrentContext.Should().ContainSingle().Which.MessageTemplate.Text.Should().Be("Response Http");
+            logEventsFromCurrentContext.Should().Contain(x => x.MessageTemplate.ToString() == "Response Http");
 
-            var _properties = TestCorrelator.GetLogEventsFromCurrentContext().Select(x => x.Properties);
-            _properties.Should().ContainSingle().Which.ContainsKey("InfoType");
-            _properties.Should().ContainSingle().Which.ContainsKey("RespBody");
-            _properties.Should().ContainSingle().Which.ContainsKey("StatusCode");
+            var _properties = TestCorrelator.GetLogEventsFromCurrentContext().Select(x => x.Properties).ToArray();
 
-            _properties.Should().ContainSingle().Which.Values.Should().Contain(x => x.ToString().Contains("UserResponse"));
+            // Cek Log Response
+            var resParam = _properties[1];
+            resParam.Should().Contain(x => x.Key == "InfoType");
+            resParam.Should().Contain(x => x.Key == "RespBody");
+            resParam.Should().Contain(x => x.Key == "StatusCode");
+
+            resParam.TryGetValue("InfoType", out var valInfoTypeRes0);
+            valInfoTypeRes0?.ToString().Trim('"').Should().Be("UserResponse");
+
+            resParam.TryGetValue("RespBody", out var valInfoTypeRes1);
+            valInfoTypeRes1?.ToString().Trim('"').Should().BeNullOrEmpty();
+
+            resParam.TryGetValue("StatusCode", out var valInfoTypeRes2);
+            valInfoTypeRes2?.ToString().Trim('"').Should().Be("200");
         }
     }
 }
