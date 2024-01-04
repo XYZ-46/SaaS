@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DataEntity.User;
 
 namespace InterfaceProject.Repository
 {
-    internal class IUserLoginRepo
+    public interface IUserLoginRepo
     {
+        public Task<UserLoginModel> Insert(UserLoginModel userLoginModel);
+        public void Update(int Id);
+        public void Delete(int Id);
     }
 }

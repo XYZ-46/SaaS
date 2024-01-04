@@ -13,14 +13,10 @@ using DataEntity;
 
 namespace Service
 {
-    public class JwtTokenService : IJwtTokenService
+    public class JwtTokenService(IOptions<JwtSetting> jwtSetting) : IJwtTokenService
     {
-        private readonly JwtSetting _jwtSetting;
+        private readonly JwtSetting _jwtSetting = jwtSetting.Value;
 
-        public JwtTokenService(IOptions<JwtSetting> jwtSetting)
-        {
-            _jwtSetting = jwtSetting.Value;
-        }
         public string GenerateJwtTokenAsync(LoginRequest user)
         {
             var SecretKey = Encoding.ASCII.GetBytes(_jwtSetting.Secret);

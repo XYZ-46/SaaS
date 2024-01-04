@@ -7,11 +7,11 @@ using System.Diagnostics.CodeAnalysis;
 using Service;
 using API.Logger;
 using InterfaceProject.Service;
-using DataEntity.Database;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Repository.Database;
 
 namespace API
 {
@@ -36,7 +36,10 @@ namespace API
                 var _jwtSetting = new JwtSetting();
                 _config.Bind("JwtSetting", _jwtSetting);
                 builder.Services.AddSingleton(Options.Create(_jwtSetting));
-                builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
+
+                builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
+                builder.Services.AddTransient<IUserService, UserService>();
+                builder.Services.AddTransient<IAuthService, AuthService>();
 
                 builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters()

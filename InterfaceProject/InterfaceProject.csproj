@@ -11,4 +11,8 @@
     <ProjectReference Include="..\DataEntity\DataEntity.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Search\" />
+  </ItemGroup>
+
 </Project>

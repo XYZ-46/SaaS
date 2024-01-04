@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DataEntity
+namespace DataEntity.User
 {
     public class LoginRequest
     {

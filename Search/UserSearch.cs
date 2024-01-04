@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository
+namespace Search
 {
-    public class UserProfileRepo
+    public class UserSearch
     {
     }
 }
