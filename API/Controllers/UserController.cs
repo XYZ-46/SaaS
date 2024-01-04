@@ -11,8 +11,15 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserRegisterRequest userRegisterParamReq)
         {
-            _userService.Register(userRegisterParamReq);
-            return Ok();
+            try
+            {
+                await _userService.Register(userRegisterParamReq);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

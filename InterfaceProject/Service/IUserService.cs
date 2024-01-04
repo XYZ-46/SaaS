@@ -4,6 +4,6 @@ namespace InterfaceProject.Service
 {
     public interface IUserService
     {
-        public void Register(UserRegisterRequest userRegisterParamReq);
+        public Task Register(UserRegisterRequest userRegisterParamReq);
     }
 }

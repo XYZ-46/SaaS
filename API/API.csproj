@@ -4,9 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <InvariantGlobalization>true</InvariantGlobalization>
+    <InvariantGlobalization>false</InvariantGlobalization>
     <Platforms>AnyCPU;x64</Platforms>
-    <Configurations>Debug;Release;Testing</Configurations>
     <UserSecretsId>c5e8e9db-50c2-4d4b-8524-5b944ec6a0f2</UserSecretsId>
   </PropertyGroup>
 

@@ -53,7 +53,7 @@ namespace API
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSetting.Secret))
                     });
 
-                builder.Services.AddDbContext<AzureDB>(options => options.UseSqlServer(_config.GetSection("Database:Azure").ToString()));
+                builder.Services.AddDbContext<AzureDB>(options => options.UseSqlServer(_config.GetSection("Database:Azure").Value));
 
                 builder.Services.AddControllers();
                 builder.Services.AddSingleton<IRabbitMQService>(x =>
