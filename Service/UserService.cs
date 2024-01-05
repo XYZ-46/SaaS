@@ -1,14 +1,16 @@
 ﻿using DataEntity.User;
 using InterfaceProject.Service;
+using Microsoft.Extensions.Logging;
 using Repository.Database;
 using System.Transactions;
 
 
 namespace Service
 {
-    public class UserService(AzureDB azureDB) : IUserService
+    public class UserService(AzureDB azureDB, ILogger<UserService> logger) : IUserService
     {
         private readonly AzureDB _azureDB = azureDB;
+        private readonly ILogger<UserService> _logger = logger;
 
         public async Task Register(UserRegisterRequest userRegisterParamReq)
         {
@@ -29,7 +31,8 @@ namespace Service
             }
             catch (Exception ex)
             {
-                throw ex;
+                _logger.LogError("Exception={exceptionMessage}", ex.Message);
+                throw;
             }
         }
     }
