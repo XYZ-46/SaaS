@@ -1,8 +1,6 @@
 ﻿using InterfaceProject.Service;
 using Microsoft.AspNetCore.Mvc;
 using DataEntity.User;
-using InterfaceProject.Search;
-using Service;
 
 namespace API.Controllers
 {

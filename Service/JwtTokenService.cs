@@ -24,9 +24,9 @@ namespace Service
 
             var Claims = new List<Claim>
             {
-                new("id", userLogin.Id.ToString()),
-                new("email", userProfile.Email),
-                new("FullName", userProfile.Fullname),
+                new(ClaimTypes.Sid,   userLogin.Id.ToString()),
+                new(ClaimTypes.Email, userProfile.Email),
+                new(ClaimTypes.Name,   userProfile.Fullname),
             };
 
             var SecurityToken = new JwtSecurityToken(
