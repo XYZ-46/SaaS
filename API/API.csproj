@@ -30,6 +30,7 @@
     <ProjectReference Include="..\DataEntity\DataEntity.csproj" />
     <ProjectReference Include="..\InterfaceProject\InterfaceProject.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />
+    <ProjectReference Include="..\Search\Search.csproj" />
     <ProjectReference Include="..\Service\Service.csproj" />
   </ItemGroup>
 

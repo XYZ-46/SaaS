@@ -17,16 +17,16 @@ namespace Service
     {
         private readonly JwtSetting _jwtSetting = jwtSetting.Value;
 
-        public string GenerateJwtTokenAsync(LoginRequest user)
+        public string GenerateJwtToken(UserLoginModel userLogin, UserProfileModel userProfile)
         {
             var SecretKey = Encoding.ASCII.GetBytes(_jwtSetting.Secret);
             var SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(SecretKey), SecurityAlgorithms.HmacSha256);
 
             var Claims = new List<Claim>
             {
-                new("id", "UserID"),
-                new("email", "UserEmail"),
-                new("FullName", "UserFullName"),
+                new("id", userLogin.Id.ToString()),
+                new("email", userProfile.Email),
+                new("FullName", userProfile.Fullname),
             };
 
             var SecurityToken = new JwtSecurityToken(
@@ -40,7 +40,7 @@ namespace Service
             return new JwtSecurityTokenHandler().WriteToken(SecurityToken);
         }
 
-        public int? ValidateJwtToken(string token)
+        public bool ValidateJwtToken(string token)
         {
             throw new NotImplementedException();
         }

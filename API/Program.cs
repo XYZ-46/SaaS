@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Repository.Database;
+using InterfaceProject.Search;
+using Search;
 
 namespace API
 {
@@ -40,6 +42,9 @@ namespace API
                 builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
                 builder.Services.AddTransient<IUserService, UserService>();
                 builder.Services.AddTransient<IAuthService, AuthService>();
+                builder.Services.AddTransient<IUserLoginSearch, UserLoginSearch>();
+
+                builder.Services.AddScoped<IUserProfileSearch, UserProfileSearch>();
 
                 builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters()

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DataEntity.User;
 
 namespace InterfaceProject.Service
 {
     public interface IAuthService
     {
+        public Task<string> Login(LoginRequest userloginParam);
+        public Task ForgotPassword();
+
     }
 }

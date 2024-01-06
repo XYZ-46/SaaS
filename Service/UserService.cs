@@ -3,7 +3,7 @@ using InterfaceProject.Service;
 using Microsoft.Extensions.Logging;
 using Repository.Database;
 using System.Transactions;
-
+using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace Service
 {
@@ -14,6 +14,8 @@ namespace Service
 
         public async Task Register(UserRegisterRequest userRegisterParamReq)
         {
+            userRegisterParamReq.Password = BCryptNet.HashPassword(userRegisterParamReq.Password);
+
             var userLogin = UserMapper.MapToUserLogin(userRegisterParamReq);
             var userprofile = UserMapper.MapToUserProfile(userRegisterParamReq);
 
