@@ -42,8 +42,8 @@ namespace API
                 builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
                 builder.Services.AddTransient<IUserService, UserService>();
                 builder.Services.AddTransient<IAuthService, AuthService>();
-                builder.Services.AddTransient<IUserLoginSearch, UserLoginSearch>();
 
+                builder.Services.AddScoped<IUserLoginSearch, UserLoginSearch>();
                 builder.Services.AddScoped<IUserProfileSearch, UserProfileSearch>();
 
                 builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)

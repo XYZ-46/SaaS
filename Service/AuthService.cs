@@ -26,7 +26,7 @@ namespace Service
             if (!BCryptNet.Verify(userloginParam.Password, userlogin.PasswordHash))
                 throw new AuthenticationException("Incorrect Username or password");
 
-            var token = _jwtTokenService.GenerateJwtTokenAsync(userlogin, userprofile);
+            var token = _jwtTokenService.GenerateJwtToken(userlogin, userprofile);
             return token;
         }
     }
