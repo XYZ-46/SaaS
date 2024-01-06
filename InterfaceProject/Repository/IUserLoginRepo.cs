@@ -2,9 +2,9 @@
 
 namespace InterfaceProject.Repository
 {
-    public interface IUserLoginRepo
+    public interface IUserLoginRepo : IDisposable
     {
-        public Task<UserLoginModel> Insert(UserLoginModel userLoginModel);
+        public Task<UserLoginModel> InsertAsync(UserLoginModel userLoginModel);
         public void Update(int Id);
         public void Delete(int Id);
     }

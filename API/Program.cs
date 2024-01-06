@@ -14,6 +14,8 @@ using System.Text;
 using Repository.Database;
 using InterfaceProject.Search;
 using Search;
+using InterfaceProject.Repository;
+using Repository;
 
 namespace API
 {
@@ -45,6 +47,8 @@ namespace API
 
                 builder.Services.AddScoped<IUserLoginSearch, UserLoginSearch>();
                 builder.Services.AddScoped<IUserProfileSearch, UserProfileSearch>();
+                builder.Services.AddScoped<IUserLoginRepo, UserLoginRepo>();
+                builder.Services.AddScoped<IUserProfileRepo, UserProfileRepo>();
 
                 builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters()

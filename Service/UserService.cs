@@ -1,15 +1,18 @@
 ﻿using DataEntity.User;
+using InterfaceProject.Repository;
 using InterfaceProject.Service;
 using Microsoft.Extensions.Logging;
+using Repository;
 using Repository.Database;
 using System.Transactions;
 using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace Service
 {
-    public class UserService(AzureDB azureDB, ILogger<UserService> logger) : IUserService
+    public class UserService(ILogger<UserService> logger, IUserLoginRepo userLoginRepo, IUserProfileRepo userProfileRepo) : IUserService
     {
-        private readonly AzureDB _azureDB = azureDB;
+        private readonly IUserLoginRepo _userLoginRepo = userLoginRepo;
+        private readonly IUserProfileRepo _userProfileRepo = userProfileRepo;
         private readonly ILogger<UserService> _logger = logger;
 
         public async Task Register(UserRegisterRequest userRegisterParamReq)
@@ -22,12 +25,10 @@ namespace Service
             using TransactionScope ts = new(TransactionScopeAsyncFlowOption.Enabled);
             try
             {
-                await _azureDB.UserLoginModel.AddAsync(userLogin);
-                await _azureDB.SaveChangesAsync();
+                var userLoginSaved = await _userLoginRepo.InsertAsync(userLogin);
 
-                userprofile.UserLoginId = userLogin.Id;
-                await _azureDB.UserProfileModel.AddAsync(userprofile);
-                await _azureDB.SaveChangesAsync();
+                userprofile.UserLoginId = userLoginSaved.Id;
+                await _userProfileRepo.InsertAsync(userprofile);
 
                 ts.Complete();
             }

@@ -8,7 +8,7 @@ namespace Repository
     {
         private readonly AzureDB _azureDB = azureDB;
 
-        public async Task<UserLoginModel> Insert(UserLoginModel userLoginModel)
+        public async Task<UserLoginModel> InsertAsync(UserLoginModel userLoginModel)
         {
             _azureDB.UserLoginModel.Add(userLoginModel);
             await _azureDB.SaveChangesAsync();
@@ -25,5 +25,17 @@ namespace Repository
             throw new NotImplementedException();
         }
 
+        private bool disposed = false;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed && disposing) _azureDB.Dispose();
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 }
