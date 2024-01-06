@@ -1,13 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataEntity.User;
+using InterfaceProject.Service;
+using Microsoft.AspNetCore.Mvc;
+using Service;
 
 namespace API.Controllers
 {
-    public class AuthController : MainController
+    public class AuthController(IAuthService authService) : MainController
     {
+        public readonly IAuthService _authService = authService;
+
         [HttpPost("login")]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login(LoginRequest userLoginParamReq)
         {
-            return Ok();
+            string token = await _authService.Login(userLoginParamReq);
+            return Ok(new { token });
         }
 
         [HttpPost("refresh-token")]

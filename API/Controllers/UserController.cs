@@ -6,37 +6,16 @@ using Service;
 
 namespace API.Controllers
 {
-    public class UserController(IUserService userService, IAuthService authService) : MainController
+    public class UserController(IUserService userService) : MainController
     {
         public readonly IUserService _userService = userService;
-        public readonly IAuthService _authService = authService;
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserRegisterRequest userRegisterParamReq)
         {
-            try
-            {
-                await _userService.Register(userRegisterParamReq);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            await _userService.Register(userRegisterParamReq);
+            return Ok();
         }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequest userLoginParamReq)
-        {
-            try
-            {
-                string token = await _authService.Login(userLoginParamReq);
-                return Ok(new { token });
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+     
     }
 }
