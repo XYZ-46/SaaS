@@ -9,7 +9,7 @@ namespace Repository
     {
         public async Task<UserLoginModel?> FindByIdAsync(int Id)
         {
-            var userLogin = await _azureDB.UserLoginModel.AsNoTracking().SingleOrDefaultAsync(x => x.Id == Id && !x.IsDelete);
+            var userLogin = await _azureDB.UserLoginModel.SingleOrDefaultAsync(x => x.Id == Id && !x.IsDelete);
             return userLogin;
         }
 

@@ -15,6 +15,12 @@ namespace Repository
             return existingTModel;
         }
 
+        public async Task<T?> FindByIdAsync(int Id)
+        {
+            T? existingTModel = await _azureDB.Set<T>().FindAsync(Id);
+            return existingTModel;
+        }
+
         public async Task<T> InsertAsync(T TModel)
         {
             _azureDB.Set<T>().Add(TModel);
