@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataEntity
 {
-    public abstract class ABaseModel
+    public abstract class BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -15,7 +15,7 @@ namespace DataEntity
         public DateTime CreateDate { get; set; }
         public string CreateBy { get; set; } = "NONE";
 
-
+        public string? LastUpdateBy { get; set; }
         public DateTime? LastUpdateDate { get; set; }
     }
 }

@@ -3,16 +3,16 @@ using InterfaceProject.Repository;
 using InterfaceProject.Service;
 using Microsoft.Extensions.Logging;
 using Repository;
-using Repository.Database;
 using System.Transactions;
 using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace Service
 {
-    public class UserService(ILogger<UserService> logger, IUserLoginRepo userLoginRepo, IUserProfileRepo userProfileRepo) : IUserService
+    public class UserService(ILogger<UserService> logger, IUserLoginRepository userLoginRepo, IUserProfileRepository userProfileRepo) : IUserService
     {
-        private readonly IUserLoginRepo _userLoginRepo = userLoginRepo;
-        private readonly IUserProfileRepo _userProfileRepo = userProfileRepo;
+        private readonly IUserLoginRepository _userLoginRepo = userLoginRepo;
+
+        private readonly IUserProfileRepository _userProfileRepo = userProfileRepo;
         private readonly ILogger<UserService> _logger = logger;
 
         public async Task Register(UserRegisterRequest userRegisterParamReq)

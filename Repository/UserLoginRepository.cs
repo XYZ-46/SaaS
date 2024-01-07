@@ -1,14 +1,12 @@
 ﻿using DataEntity.User;
-using InterfaceProject.Search;
+using InterfaceProject.Repository;
 using Microsoft.EntityFrameworkCore;
 using Repository.Database;
 
-namespace Search
+namespace Repository
 {
-    public class UserLoginSearch(AzureDB azureDB) : IUserLoginSearch
+    public class UserLoginRepository(AzureDB azureDB) : BaseCrudRepository<UserLoginModel>(azureDB), IUserLoginRepository
     {
-        private readonly AzureDB _azureDB = azureDB;
-
         public async Task<UserLoginModel?> FindByIdAsync(int Id)
         {
             var userLogin = await _azureDB.UserLoginModel.AsNoTracking().SingleOrDefaultAsync(x => x.Id == Id && !x.IsDelete);

@@ -1,14 +1,17 @@
 ﻿using DataEntity.User;
-using InterfaceProject.Search;
+using InterfaceProject.Repository;
 using Microsoft.EntityFrameworkCore;
 using Repository.Database;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Search
+namespace Repository
 {
-    public class UserProfileSearch(AzureDB azureDB) : IUserProfileSearch
+    public class UserProfileRepository(AzureDB azureDB) : BaseCrudRepository<UserProfileModel>(azureDB), IUserProfileRepository
     {
-        private readonly AzureDB _azureDB = azureDB;
-
         public async Task<UserProfileModel?> FindByEmailAsync(string email)
         {
             var userProfile = await _azureDB.UserProfileModel.SingleOrDefaultAsync(x => x.Email == email && !x.IsDelete);
@@ -18,12 +21,6 @@ namespace Search
         public async Task<UserProfileModel?> FindByFullNameAsync(string fullname)
         {
             var userProfile = await _azureDB.UserProfileModel.SingleOrDefaultAsync(x => x.Fullname == fullname && !x.IsDelete);
-            return userProfile;
-        }
-
-        public async Task<UserProfileModel?> FindByIDAsync(int id)
-        {
-            var userProfile = await _azureDB.UserProfileModel.SingleOrDefaultAsync(x => x.Id == id && !x.IsDelete);
             return userProfile;
         }
 
