@@ -23,28 +23,46 @@ namespace XunitTest.User
             var userInserted = await repo.InsertAsync(userLogin);
             var userfinded1 = await repo.FindByIdAsync(userInserted);
             var userfinded2 = await repo.FindByIdAsync(userInserted.Id);
+            var userfinded3 = await repo.FindByUsernameAsync(userLogin.Username);
 
             // Assert
             Assert.Single(_azureDB.UserLoginModel);
             Assert.False(userInserted.IsDelete);
             Assert.NotNull(userfinded1);
             Assert.NotNull(userfinded2);
+            Assert.NotNull(userfinded3);
+            Assert.Equal(userfinded3.Username, userInserted.Username);
+            Assert.Equal(userfinded3.PasswordHash, userfinded1.PasswordHash);
 
             // ACT 2
-            userInserted.Username = "ganti";
+            var OldUsername = userLogin.Username;
+            var NewUsername = "ganti";
+            userInserted.Username = NewUsername;
             var userUpdated = await repo.UpdateAsync(userInserted);
+            var userfinded4 = await repo.FindByUsernameAsync(NewUsername);
+            var userfinded41 = await repo.FindByUsernameAsync(OldUsername);
+
 
             // Assert 2
             Assert.Single(_azureDB.UserLoginModel);
             Assert.Equal(userUpdated.Username, userInserted.Username);
             Assert.False(userUpdated.IsDelete);
+            Assert.NotNull(userfinded4);
+            Assert.Null(userfinded41);
 
             // ACT 3
-            var userDeleted = await repo.DeleteAsync(userLogin);
+            var userDeleted1 = await repo.DeleteAsync(userLogin);
+            var userDeleted2 = await repo.DeleteAsync(userUpdated);
+            var userfinded5 = await repo.FindByUsernameAsync(NewUsername);
+            var userfinded6 = await repo.FindByUsernameAsync(userUpdated.Username);
+
 
             // Assert 3
             Assert.Single(_azureDB.UserLoginModel);
-            Assert.True(userDeleted);
+            Assert.True(userDeleted1);
+            Assert.True(userDeleted2);
+            Assert.Null(userfinded5);
+            Assert.Null(userfinded6);
 
         }
     }
