@@ -30,8 +30,7 @@ namespace Repository
 
         public async Task<T> UpdateAsync(T TModel)
         {
-            T? existingTModel = await _azureDB.Set<T>().FindAsync(TModel.Id);
-            if (existingTModel != null) throw new DbUpdateException("No Data Found For Updated");
+            _ = await FindByIdAsync(TModel.Id) ?? throw new DbUpdateException("No Data Found For Updated");
 
             _azureDB.Set<T>().Update(TModel);
             await _azureDB.SaveChangesAsync();

@@ -20,18 +20,23 @@ namespace XunitTest.User
             };
 
             // ACT
-            await repo.InsertAsync(userLogin);
+            var userInserted = await repo.InsertAsync(userLogin);
+            var userfinded1 = await repo.FindByIdAsync(userInserted);
+            var userfinded2 = await repo.FindByIdAsync(userInserted.Id);
 
             // Assert
             Assert.Single(_azureDB.UserLoginModel);
+            Assert.False(userInserted.IsDelete);
+            Assert.NotNull(userfinded1);
+            Assert.NotNull(userfinded2);
 
             // ACT 2
-            userLogin.Username = "ganti";
-            var userUpdated = await repo.UpdateAsync(userLogin);
+            userInserted.Username = "ganti";
+            var userUpdated = await repo.UpdateAsync(userInserted);
 
             // Assert 2
             Assert.Single(_azureDB.UserLoginModel);
-            Assert.Equal(userUpdated.Username,userLogin.Username);
+            Assert.Equal(userUpdated.Username, userInserted.Username);
             Assert.False(userUpdated.IsDelete);
 
             // ACT 3
@@ -39,7 +44,7 @@ namespace XunitTest.User
 
             // Assert 3
             Assert.Single(_azureDB.UserLoginModel);
-            Assert.True(userUpdated.IsDelete);
+            Assert.True(userDeleted);
 
         }
     }
