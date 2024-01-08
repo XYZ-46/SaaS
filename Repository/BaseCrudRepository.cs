@@ -28,7 +28,7 @@ namespace Repository
             return TModel;
         }
 
-        public async Task<T> Update(T TModel)
+        public async Task<T> UpdateAsync(T TModel)
         {
             T? existingTModel = await _azureDB.Set<T>().FindAsync(TModel.Id);
             if (existingTModel != null) throw new DbUpdateException("No Data Found For Updated");
@@ -38,7 +38,7 @@ namespace Repository
             return TModel;
         }
 
-        public async Task<bool> Delete(T TModel)
+        public async Task<bool> DeleteAsync(T TModel)
         {
             bool result = false;
 

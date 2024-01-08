@@ -8,8 +8,8 @@ namespace InterfaceProject.Repository
         public Task<T?> FindByIdAsync(int Id);
 
         public Task<T> InsertAsync(T TModel);
-        public Task<T> Update(T TModel);
+        public Task<T> UpdateAsync(T TModel);
 
-        public Task<bool> Delete(T TModel);
+        public Task<bool> DeleteAsync(T TModel);
     }
 }

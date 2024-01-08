@@ -2,7 +2,6 @@
 using InterfaceProject.Repository;
 using InterfaceProject.Service;
 using Microsoft.Extensions.Logging;
-using Repository;
 using System.Transactions;
 using BCryptNet = BCrypt.Net.BCrypt;
 
