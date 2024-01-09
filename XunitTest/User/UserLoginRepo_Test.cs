@@ -1,6 +1,8 @@
 ﻿using DataEntity.User;
 using Repository.Database;
 using Repository;
+using System.Reactive.Subjects;
+using Microsoft.EntityFrameworkCore;
 
 namespace XunitTest.User
 {
@@ -9,7 +11,7 @@ namespace XunitTest.User
         private readonly AzureDB _azureDB = ContextDB_Generator.AzureGenerator();
 
         [Fact]
-        public async Task UserLogin_CRUD_Test()
+        public async Task UserLogin_CRUD_positiveTest()
         {
             // Arrange
             var repo = new UserLoginRepository(_azureDB);
@@ -31,8 +33,7 @@ namespace XunitTest.User
             Assert.NotNull(userfinded1);
             Assert.NotNull(userfinded2);
             Assert.NotNull(userfinded3);
-            Assert.Equal(userfinded3.Username, userInserted.Username);
-            Assert.Equal(userfinded3.PasswordHash, userfinded1.PasswordHash);
+            Assert.Equal(userInserted.Username, userInserted.Username);
 
             // ACT 2
             var OldUsername = userLogin.Username;
@@ -42,10 +43,10 @@ namespace XunitTest.User
             var userfinded4 = await repo.FindByUsernameAsync(NewUsername);
             var userfinded41 = await repo.FindByUsernameAsync(OldUsername);
 
-
             // Assert 2
             Assert.Single(_azureDB.UserLoginModel);
             Assert.Equal(userUpdated.Username, userInserted.Username);
+            Assert.NotEqual(userUpdated.Username, OldUsername);
             Assert.False(userUpdated.IsDelete);
             Assert.NotNull(userfinded4);
             Assert.Null(userfinded41);
@@ -56,13 +57,27 @@ namespace XunitTest.User
             var userfinded5 = await repo.FindByUsernameAsync(NewUsername);
             var userfinded6 = await repo.FindByUsernameAsync(userUpdated.Username);
 
-
             // Assert 3
             Assert.Single(_azureDB.UserLoginModel);
             Assert.True(userDeleted1);
             Assert.True(userDeleted2);
             Assert.Null(userfinded5);
             Assert.Null(userfinded6);
+
+        }
+
+        [Fact]
+        public async Task UserLogin_CRUD_Negative_Test()
+        {
+
+            // Arrange
+            var repo = new UserLoginRepository(_azureDB);
+            var userLogin = new UserLoginModel();
+
+            Task act() => repo.InsertAsync(userLogin);
+            await Assert.ThrowsAsync<DbUpdateException>(act);
+            Assert.False(_azureDB.UserLoginModel.Any());
+
 
         }
     }

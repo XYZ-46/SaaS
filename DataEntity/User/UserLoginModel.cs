@@ -7,9 +7,9 @@ namespace DataEntity.User
     public class UserLoginModel : BaseEntity
     {
         [Required]
-        public string Username { get; set; } = string.Empty;
+        public string Username { get; set; }
         [Required]
-        public string PasswordHash { get; set; } = string.Empty;
+        public string PasswordHash { get; set; }
 
     }
 }
