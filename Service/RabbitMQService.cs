@@ -70,19 +70,5 @@ namespace Service
         {
             _channel.BasicPublish(_messageConfig.ExchangeName, _messageConfig.RouteKey, null, Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message)));
         }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            _channel.Dispose();
-            _connection.Dispose();
-        }
-
-        ~RabbitMQService() => Dispose(false);
     }
 }

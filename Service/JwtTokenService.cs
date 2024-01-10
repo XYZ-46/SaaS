@@ -58,5 +58,13 @@ namespace Service
                 CreatedByIp = ipAddress
             };
         }
+
+        private bool disposed = false;
+        protected virtual void Dispose(bool disposing) => this.disposed = true;
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

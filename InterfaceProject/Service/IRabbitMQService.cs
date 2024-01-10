@@ -2,7 +2,7 @@
 
 namespace InterfaceProject.Service
 {
-    public interface IRabbitMQService : IDisposable
+    public interface IRabbitMQService 
     {
         bool IsSameMessageConfig(MessageRabbitMQConfig messageConfig);
         void SetupQueue(MessageRabbitMQConfig messageConfig);

@@ -6,7 +6,6 @@ namespace DataEntity.User
     [Table("UserProfile")]
     public class UserProfileModel : BaseEntity
     {
-        [ForeignKey("UserLogin")]
         [Required(ErrorMessage = "UserLoginId is required")]
         public int UserLoginId { get; set; }
 
@@ -16,6 +15,7 @@ namespace DataEntity.User
         [Required(ErrorMessage = "Fullname is required")]
         public string Fullname { get; set; }
 
+        [ForeignKey("UserLoginId")]
         public UserLoginModel UserLogin { get; set; }
     }
 }

@@ -6,10 +6,9 @@ using InterfaceProject.Repository;
 
 namespace Service
 {
-    public class AuthService(IUserLoginRepository userLoginRepo, IJwtTokenService jwtTokenService, IUserProfileRepository userProfileRepo)
+    public class AuthService(IJwtTokenService jwtTokenService, IUserProfileRepository userProfileRepo)
         : IAuthService
     {
-        private readonly IUserLoginRepository _userLoginRepo = userLoginRepo;
         private readonly IJwtTokenService _jwtTokenService = jwtTokenService;
         public readonly IUserProfileRepository _userProfileRepo = userProfileRepo;
 
@@ -27,6 +26,22 @@ namespace Service
 
             var token = _jwtTokenService.GenerateJwtToken(userprofile);
             return token;
+        }
+
+        private bool disposed = false;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed && disposing)
+            {
+                _jwtTokenService.Dispose();
+                _userProfileRepo.Dispose();
+            }
+            this.disposed = true;
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

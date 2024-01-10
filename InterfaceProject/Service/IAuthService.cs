@@ -2,7 +2,7 @@
 
 namespace InterfaceProject.Service
 {
-    public interface IAuthService
+    public interface IAuthService : IDisposable
     {
         public Task<string> Login(LoginRequest userloginParam);
         public Task ForgotPassword();
