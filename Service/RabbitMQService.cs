@@ -28,7 +28,6 @@ namespace Service
             {
                 _connection = factory.CreateConnection();
                 _channel = _connection.CreateModel();
-
             }
             catch
             {

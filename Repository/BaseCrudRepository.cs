@@ -41,12 +41,11 @@ namespace Repository
         {
             bool result = false;
 
-            T? existingTModel = await _azureDB.Set<T>().FindAsync(TModel.Id);
+            T? existingTModel = await FindByIdAsync(TModel.Id);
             if (existingTModel != null)
             {
                 TModel.IsDelete = true;
-                _azureDB.Set<T>().Update(TModel);
-                await _azureDB.SaveChangesAsync();
+                await UpdateAsync(TModel);
                 result = true;
             }
 

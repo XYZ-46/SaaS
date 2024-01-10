@@ -74,11 +74,17 @@ namespace XunitTest.User
             var repo = new UserLoginRepository(_azureDB);
             var userLogin = new UserLoginModel();
 
-            Task act() => repo.InsertAsync(userLogin);
-            await Assert.ThrowsAsync<DbUpdateException>(act);
+            Task actInsert() => repo.InsertAsync(userLogin);
+            await Assert.ThrowsAsync<DbUpdateException>(actInsert);
             Assert.False(_azureDB.UserLoginModel.Any());
 
+            Task actUpdate() => repo.UpdateAsync(userLogin);
+            await Assert.ThrowsAsync<DbUpdateException>(actUpdate);
+            Assert.False(_azureDB.UserLoginModel.Any());
 
+            var result = await repo.DeleteAsync(userLogin);
+            Assert.False(_azureDB.UserLoginModel.Any());
+            Assert.False(result);
         }
     }
 }

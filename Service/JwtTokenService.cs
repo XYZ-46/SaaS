@@ -17,14 +17,14 @@ namespace Service
     {
         private readonly JwtSetting _jwtSetting = jwtSetting.Value;
 
-        public string GenerateJwtToken(UserLoginModel userLogin, UserProfileModel userProfile)
+        public string GenerateJwtToken(UserProfileModel userProfile)
         {
             var SecretKey = Encoding.ASCII.GetBytes(_jwtSetting.Secret);
             var SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(SecretKey), SecurityAlgorithms.HmacSha256);
 
             var Claims = new List<Claim>
             {
-                new(ClaimTypes.Sid,   userLogin.Id.ToString()),
+                new(ClaimTypes.Sid, userProfile.UserLogin.Id.ToString()),
                 new(ClaimTypes.Email, userProfile.Email),
                 new(ClaimTypes.Name,   userProfile.Fullname),
             };

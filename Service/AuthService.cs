@@ -20,13 +20,12 @@ namespace Service
 
         public async Task<string> Login(LoginRequest userloginParam)
         {
-            var userlogin = await _userLoginRepo.FindByUsernameAsync(userloginParam.Username) ?? throw new AuthenticationException("Incorrect Username or password");
-            var userprofile = await _userProfileRepo.FindByUserLoginIdAsync(userlogin.Id) ?? throw new MissingMemberException("User do not setup yet");
+            UserProfileModel userprofile = await _userProfileRepo.FindByUserLoginUsernameAsync(userloginParam.Username) ?? throw new MissingMemberException("User do not setup yet");
 
-            if (!BCryptNet.Verify(userloginParam.Password, userlogin.PasswordHash))
+            if (!BCryptNet.Verify(userloginParam.Password, userprofile.UserLogin.PasswordHash))
                 throw new AuthenticationException("Incorrect Username or password");
 
-            var token = _jwtTokenService.GenerateJwtToken(userlogin, userprofile);
+            var token = _jwtTokenService.GenerateJwtToken(userprofile);
             return token;
         }
     }
