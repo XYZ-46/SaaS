@@ -45,7 +45,12 @@ namespace API
 
                 builder.Services.AddScoped<IUserLoginRepository, UserLoginRepository>();
                 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
-                builder.Services.AddScoped<ICacheService, CacheService>(x => new CacheService(_config.GetSection("RedisConnection").Value!));
+                
+                builder.Services.AddSingleton<IRedisDbProvider>(provider =>
+                {
+                    return new RedisDbProvider(_config.GetSection("RedisConnection").Value!);
+                });
+                builder.Services.AddSingleton<ICacheHandler, RedisCacheHandler>();
 
                 builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters()

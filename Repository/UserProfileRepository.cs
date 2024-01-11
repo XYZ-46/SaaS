@@ -3,13 +3,14 @@ using InterfaceProject.Repository;
 using InterfaceProject.Service;
 using Microsoft.EntityFrameworkCore;
 using Repository.Database;
+using System.Text.Json;
 
 namespace Repository
 {
-    public class UserProfileRepository(AzureDB azureDB, ICacheService cacheService)
+    public class UserProfileRepository(AzureDB azureDB, ICacheHandler cacheHandler)
         : BaseCrudRepository<UserProfileModel>(azureDB), IUserProfileRepository
     {
-        private readonly ICacheService _cacheService = cacheService;
+        private readonly ICacheHandler _cacheHandler = cacheHandler;
 
         public async Task<UserProfileModel?> FindByEmailAsync(string email)
         {
@@ -28,7 +29,7 @@ namespace Repository
         public async Task<UserProfileModel?> FindByUserLoginUsernameAsync(string username)
         {
             var keyCache = $"UserProfileModel:{username}";
-            var cacheData = await _cacheService.GetDataAsync<UserProfileModel>(keyCache);
+            var cacheData = await _cacheHandler.GetDataAsync<UserProfileModel>(keyCache);
             if (cacheData != null) return cacheData;
 
             var userProfile = await _azureDB.UserProfileModel
@@ -36,8 +37,9 @@ namespace Repository
                                             .SingleOrDefaultAsync(x => x.UserLogin.Username == username && !x.IsDelete && !x.UserLogin.IsDelete);
             if (userProfile != null)
             {
-                var expirationTime = DateTimeOffset.Now.AddHours(24);
-                await _cacheService.SetDataAsync<UserProfileModel>(keyCache, userProfile, expirationTime);
+                // update cache
+                var expirationTime = DateTime.Now.AddHours(24).TimeOfDay;
+                await _cacheHandler.SetDataAsync(keyCache, userProfile, expirationTime);
             }
 
             return userProfile;
