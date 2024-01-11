@@ -45,6 +45,7 @@ namespace API
 
                 builder.Services.AddScoped<IUserLoginRepository, UserLoginRepository>();
                 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+                builder.Services.AddScoped<ICacheService, CacheService>();
 
                 builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters()
