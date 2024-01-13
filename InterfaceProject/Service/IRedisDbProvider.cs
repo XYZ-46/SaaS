@@ -2,7 +2,7 @@
 
 namespace InterfaceProject.Service
 {
-    public interface IRedisDbProvider : IDisposable
+    public interface IRedisDbProvider
     {
         public IDatabase Database { get; }
     }

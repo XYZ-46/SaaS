@@ -2,7 +2,7 @@
 
 namespace InterfaceProject.Repository
 {
-    public interface IBaseCrudRepository<T> : IDisposable where T : BaseEntity
+    public interface IBaseCrudRepository<T> where T : BaseEntity
     {
         public Task<T?> FindByIdAsync(T TModel);
         public Task<T?> FindByIdAsync(int Id);

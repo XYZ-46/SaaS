@@ -2,7 +2,7 @@
 
 namespace InterfaceProject.Service
 {
-    public interface IJwtTokenService : IDisposable
+    public interface IJwtTokenService
     {
         public string GenerateJwtToken(UserProfileModel userProfile);
         public bool ValidateJwtToken(string token);

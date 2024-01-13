@@ -1,6 +1,6 @@
 ﻿namespace InterfaceProject.Service
 {
-    public interface ICacheHandler : IDisposable
+    public interface ICacheHandler
     {
         Task<T> GetDataAsync<T>(string key);
         Task<bool> SetDataAsync<T>(string key, T value, TimeSpan? expiry = null);

@@ -36,29 +36,5 @@ namespace Service
         {
             return await _redisDbProvider.Database.KeyExistsAsync(key).ConfigureAwait(false);
         }
-
-        private bool disposedValue;
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    _redisDbProvider.Dispose();
-                }
-
-                disposedValue = true;
-            }
-        }
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-        ~RedisCacheHandler()
-        {
-            Dispose(disposing: false);
-        }
-
     }
 }

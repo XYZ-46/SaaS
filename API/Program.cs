@@ -69,8 +69,8 @@ namespace API
                 builder.Services.AddControllers();
                 builder.Services.AddSingleton<IRabbitMQService>(x =>
                 {
-                    var _rabbitmqClientConfig = _config.GetSection("Middleware:RabbitMQClient").Get<RabbitMQClientConfig>();
-                    var _sinkMessageConfig = _config.GetSection("Serilog:SinkRabbitMQ").Get<MessageRabbitMQConfig>();
+                    var _rabbitmqClientConfig = _config.GetSection("RabbitMQ:RabbitMQClient").Get<RabbitMQClientConfig>();
+                    var _sinkMessageConfig = _config.GetSection("RabbitMQ:SinkConfig").Get<MessageRabbitMQConfig>();
 
                     var rabbitService = new RabbitMQService(_rabbitmqClientConfig!, _sinkMessageConfig!);
                     return rabbitService;
