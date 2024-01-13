@@ -10,6 +10,7 @@ namespace DataEntity.User
         public int UserLoginId { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email format")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Fullname is required")]
