@@ -14,10 +14,10 @@ namespace Service
             if (_redisDbProvider.Database == null) throw new ArgumentNullException("The provided redisDbProvider or its database is null");
         }
 
-        public async Task<T> GetDataAsync<T>(string key)
+        public async Task<T?> GetDataAsync<T>(string key)
         {
-            var value =  await _redisDbProvider.Database.StringGetAsync(key).ConfigureAwait(false);
-            if (!string.IsNullOrEmpty(value)) return JsonSerializer.Deserialize<T>(value);
+            var value = await _redisDbProvider.Database.StringGetAsync(key);
+            if (value.HasValue) return JsonSerializer.Deserialize<T>(value!);
             return default;
         }
 
