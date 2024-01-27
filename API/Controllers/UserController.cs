@@ -1,6 +1,6 @@
-﻿using InterfaceProject.Service;
+﻿using DataEntity.Request;
+using InterfaceProject.Service;
 using Microsoft.AspNetCore.Mvc;
-using DataEntity.User;
 
 namespace API.Controllers
 {

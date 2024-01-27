@@ -1,4 +1,5 @@
-﻿using DataEntity.User;
+﻿using DataEntity.Mapper;
+using DataEntity.Request;
 using InterfaceProject.Repository;
 using InterfaceProject.Service;
 using Microsoft.Extensions.Logging;

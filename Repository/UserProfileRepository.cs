@@ -1,9 +1,8 @@
-﻿using DataEntity.User;
+﻿using DataEntity.Model;
 using InterfaceProject.Repository;
 using InterfaceProject.Service;
 using Microsoft.EntityFrameworkCore;
 using Repository.Database;
-using System.Text.Json;
 
 namespace Repository
 {
@@ -20,11 +19,7 @@ namespace Repository
             return userProfile;
         }
 
-        public async Task<UserProfileModel?> FindByFullNameAsync(string fullname)
-        {
-            var userProfile = await _azureDB.UserProfileModel.SingleOrDefaultAsync(x => x.Fullname == fullname && !x.IsDelete);
-            return userProfile;
-        }
+        public async Task<UserProfileModel?> FindByFullNameAsync(string fullname) => await _azureDB.UserProfileModel.SingleOrDefaultAsync(x => x.Fullname == fullname && !x.IsDelete);
 
         public async Task<UserProfileModel?> FindByUserLoginUsernameAsync(string username)
         {

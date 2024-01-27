@@ -1,4 +1,4 @@
-﻿using DataEntity.User;
+﻿using DataEntity.Model;
 
 namespace InterfaceProject.Repository
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DataEntity.User
+namespace DataEntity.Request
 {
     public class UserRegisterRequest
     {

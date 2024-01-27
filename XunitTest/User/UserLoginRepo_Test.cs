@@ -1,8 +1,7 @@
-﻿using DataEntity.User;
-using Repository.Database;
-using Repository;
-using System.Reactive.Subjects;
+﻿using DataEntity.Model;
 using Microsoft.EntityFrameworkCore;
+using Repository;
+using Repository.Database;
 
 namespace XunitTest.User
 {

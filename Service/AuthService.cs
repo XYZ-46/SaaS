@@ -1,8 +1,9 @@
-﻿using DataEntity.User;
-using InterfaceProject.Service;
+﻿using InterfaceProject.Service;
 using BCryptNet = BCrypt.Net.BCrypt;
 using System.Security.Authentication;
 using InterfaceProject.Repository;
+using DataEntity.Request;
+using DataEntity.Model;
 
 namespace Service
 {

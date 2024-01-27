@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataEntity.User
+namespace DataEntity.Model
 {
     [Table("UserProfile")]
     public class UserProfileModel : BaseEntity

@@ -1,4 +1,7 @@
-﻿namespace DataEntity.User
+﻿using DataEntity.Model;
+using DataEntity.Request;
+
+namespace DataEntity.Mapper
 {
     public static class UserMapper
     {

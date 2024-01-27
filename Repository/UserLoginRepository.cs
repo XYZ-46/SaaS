@@ -1,4 +1,4 @@
-﻿using DataEntity.User;
+﻿using DataEntity.Model;
 using InterfaceProject.Repository;
 using Microsoft.EntityFrameworkCore;
 using Repository.Database;

@@ -1,5 +1,4 @@
 ﻿using AppConfiguration;
-using DataEntity.User;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,6 +8,7 @@ using InterfaceProject.Service;
 using System;
 using System.Security.Cryptography;
 using DataEntity;
+using DataEntity.Model;
 
 
 namespace Service

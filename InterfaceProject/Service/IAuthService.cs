@@ -1,4 +1,4 @@
-﻿using DataEntity.User;
+﻿using DataEntity.Request;
 
 namespace InterfaceProject.Service
 {
