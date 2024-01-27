@@ -7,10 +7,10 @@ using System.Text.Json;
 
 namespace Repository
 {
-    public class UserProfileRepository(AzureDB azureDB, ICacheHandler cacheHandler)
+    public class UserProfileRepository(AzureDB azureDB, IRedisService cacheHandler)
         : BaseCrudRepository<UserProfileModel>(azureDB), IUserProfileRepository
     {
-        private readonly ICacheHandler _cacheHandler = cacheHandler;
+        private readonly IRedisService _cacheHandler = cacheHandler;
 
         public async Task<UserProfileModel?> FindByEmailAsync(string email)
         {

@@ -1,6 +1,6 @@
 ﻿namespace InterfaceProject.Service
 {
-    public interface ICacheHandler
+    public interface IRedisService
     {
         Task<T?> GetDataAsync<T>(string key);
         Task<bool> SetDataAsync<T>(string key, T value, TimeSpan? expiry = null);

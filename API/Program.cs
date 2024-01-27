@@ -1,19 +1,19 @@
-using Serilog;
-using System.Reflection;
-using System.Net;
-using AppConfiguration;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.CodeAnalysis;
-using Service;
 using API.Logger;
-using InterfaceProject.Service;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Repository.Database;
+using AppConfiguration;
 using InterfaceProject.Repository;
+using InterfaceProject.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Repository;
+using Repository.Database;
+using Serilog;
+using Service;
+using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using System.Reflection;
+using System.Text;
 
 namespace API
 {
@@ -46,11 +46,10 @@ namespace API
                 builder.Services.AddScoped<IUserLoginRepository, UserLoginRepository>();
                 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
                 
-                builder.Services.AddSingleton<IRedisDbProvider>(provider =>
+                builder.Services.AddSingleton<IRedisService, RedisService>( x =>
                 {
-                    return new RedisDbProvider(_config.GetSection("RedisConnection").Value!);
+                    return new RedisService(_config.GetSection("RedisConnection").Value!);
                 });
-                builder.Services.AddSingleton<ICacheHandler, RedisCacheHandler>();
 
                 builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters()
