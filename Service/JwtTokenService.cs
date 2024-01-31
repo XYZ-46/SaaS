@@ -1,21 +1,19 @@
 ﻿using AppConfiguration;
-using Microsoft.Extensions.Options;
+using DataEntity;
+using DataEntity.Model;
+using InterfaceProject.Service;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
-using InterfaceProject.Service;
-using System;
 using System.Security.Cryptography;
-using DataEntity;
-using DataEntity.Model;
+using System.Text;
 
 
 namespace Service
 {
-    public class JwtTokenService(IOptions<JwtSetting> jwtSetting) : IJwtTokenService
+    public class JwtTokenService(JwtSetting jwtSetting) : IJwtTokenService
     {
-        private readonly JwtSetting _jwtSetting = jwtSetting.Value;
+        private readonly JwtSetting _jwtSetting = jwtSetting;
 
         public string GenerateJwtToken(UserProfileModel userProfile)
         {

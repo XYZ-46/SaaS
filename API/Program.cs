@@ -1,10 +1,8 @@
 using API.Logger;
 using AppConfiguration;
-using InterfaceProject.Repository;
 using InterfaceProject.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Repository;
 using Repository.Database;
@@ -23,7 +21,7 @@ namespace API
         public static void Main(string[] args)
         {
             string ASPNETCORE_ENVIRONMENT = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")?.ToLower() ?? "production";
-            var _config = new ConfigurationBuilder()
+            IConfiguration _config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddEnvironmentVariables()
                 .AddJsonFile("appsettings.json")
@@ -35,21 +33,10 @@ namespace API
             { // Service
                 builder.Services.AddSwaggerGen();
 
-                var _jwtSetting = new JwtSetting();
-                _config.Bind("JwtSetting", _jwtSetting);
-                builder.Services.AddSingleton(Options.Create(_jwtSetting));
+                var _jwtSetting = _config.GetSection("JwtSetting").Get<JwtSetting>();
 
-                builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
-                builder.Services.AddTransient<IUserService, UserService>();
-                builder.Services.AddTransient<IAuthService, AuthService>();
-
-                builder.Services.AddScoped<IUserLoginRepository, UserLoginRepository>();
-                builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
-                
-                builder.Services.AddSingleton<IRedisService, RedisService>( x =>
-                {
-                    return new RedisService(_config.GetSection("RedisConnection").Value!);
-                });
+                builder.Services.RegisterDIServices(_config);
+                builder.Services.RegisterDIRepository();
 
                 builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters()
@@ -58,22 +45,13 @@ namespace API
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = _jwtSetting.Issuer,
+                        ValidIssuer = _jwtSetting!.Issuer,
                         ValidAudience = _jwtSetting.Audience,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSetting.Secret))
                     });
 
                 builder.Services.AddDbContext<AzureDB>(options => options.UseSqlServer(_config.GetSection("Database:Azure").Value));
-
                 builder.Services.AddControllers();
-                builder.Services.AddSingleton<IRabbitMQService>(x =>
-                {
-                    var _rabbitmqClientConfig = _config.GetSection("RabbitMQ:RabbitMQClient").Get<RabbitMQClientConfig>();
-                    var _sinkMessageConfig = _config.GetSection("RabbitMQ:SinkConfig").Get<MessageRabbitMQConfig>();
-
-                    var rabbitService = new RabbitMQService(_rabbitmqClientConfig!, _sinkMessageConfig!);
-                    return rabbitService;
-                });
 
                 builder.Host.UseSerilog((hostBuilderContext, service, loggerConfig) =>
                 {
@@ -122,7 +100,7 @@ namespace API
             return string.Join("; ", addressIPs.Where(x => !string.IsNullOrEmpty(x)));
         }
 
-    } // End public static partial class Program
+    } // End class Program
 }
 
 
