@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DataEntity.Model
 {
     [Table("UserProfile")]
-    public class UserProfileModel : BaseEntity
+    public record UserProfileModel : BaseEntity
     {
         [Required(ErrorMessage = "UserLoginId is required")]
         public int UserLoginId { get; set; }
