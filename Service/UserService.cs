@@ -15,12 +15,12 @@ namespace Service
         private readonly IUserProfileRepository _userProfileRepo = userProfileRepo;
         private readonly ILogger<UserService> _logger = logger;
 
-        public async Task Register(UserRegisterRequest userRegisterParamReq)
+        public async Task Register(UserRegisterRequest userRegisterParam)
         {
-            userRegisterParamReq.Password = BCryptNet.HashPassword(userRegisterParamReq.Password);
+            userRegisterParam.Password = BCryptNet.HashPassword(userRegisterParam.Password);
 
-            var userLogin = UserMapper.MapToUserLogin(userRegisterParamReq);
-            var userprofile = UserMapper.MapToUserProfile(userRegisterParamReq);
+            var userLogin = userRegisterParam.MapToUserLogin();
+            var userprofile = userRegisterParam.MapToUserProfile();
 
             using TransactionScope ts = new(TransactionScopeAsyncFlowOption.Enabled);
             try
