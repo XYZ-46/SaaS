@@ -1,5 +1,6 @@
 using API.Logger;
 using AppConfiguration;
+using DataEntity;
 using InterfaceProject.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,8 @@ namespace API
 
                 builder.Services.RegisterDIServices(_config);
                 builder.Services.RegisterDIRepository();
-
+                builder.Services.RegisterDIEntity();
+                
                 builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters()
                     {
@@ -69,6 +71,7 @@ namespace API
                 app.UseMiddleware<LoggerReqHttp>();
                 app.UseMiddleware<LoggerRespHttp>();
                 app.UseMiddleware<ErrorHandler>();
+
                 if (!app.Environment.IsEnvironment("Production"))
                 {
                     app.UseDeveloperExceptionPage();
