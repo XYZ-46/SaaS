@@ -10,11 +10,9 @@ namespace DataEntity
     {
         public static IServiceCollection RegisterDIEntity(this IServiceCollection services)
         {
-            services.AddFluentValidationAutoValidation();
-
-            services.AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
-
-            return services;
+            return services
+                .AddFluentValidationAutoValidation()
+                .AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
         }
     }
 }

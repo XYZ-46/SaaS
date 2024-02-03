@@ -7,10 +7,9 @@ namespace Repository
     {
         public static IServiceCollection RegisterDIRepository(this IServiceCollection services)
         {
-            services.AddTransient<IUserLoginRepository, UserLoginRepository>();
-            services.AddTransient<IUserProfileRepository, UserProfileRepository>();
-
-            return services;
+            return services
+                .AddScoped<IUserLoginRepository, UserLoginRepository>()
+                .AddScoped<IUserProfileRepository, UserProfileRepository>();
         }
     }
 }

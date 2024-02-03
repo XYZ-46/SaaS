@@ -13,14 +13,13 @@ namespace Service
             var _rabbitmqClientConfig = _config.GetSection("RabbitMQ:RabbitMQClient").Get<RabbitMQClientConfig>();
             var _sinkMessageConfig = _config.GetSection("RabbitMQ:SinkConfig").Get<MessageRabbitMQConfig>();
 
-            services.AddTransient<IJwtTokenService, JwtTokenService>(x => new JwtTokenService(_jwtSetting!));
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IAuthService, AuthService>();
+            return services
+                .AddScoped<IJwtTokenService, JwtTokenService>(x => new JwtTokenService(_jwtSetting!))
+                .AddScoped<IUserService, UserService>()
+                .AddScoped<IAuthService, AuthService>()
 
-            services.AddSingleton<IRedisService, RedisService>(x => new RedisService(_config.GetSection("RedisConnection").Value!));
-            services.AddSingleton<IRabbitMQService>(x => new RabbitMQService(_rabbitmqClientConfig!, _sinkMessageConfig!));
-
-            return services;
+                .AddSingleton<IRedisService, RedisService>(x => new RedisService(_config.GetSection("RedisConnection").Value!))
+                .AddSingleton<IRabbitMQService>(x => new RabbitMQService(_rabbitmqClientConfig!, _sinkMessageConfig!));
         }
     }
 }
