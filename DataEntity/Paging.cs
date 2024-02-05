@@ -4,7 +4,6 @@ namespace DataEntity
 {
     public class Paging
     {
-
         public int PageIndex { get; set; } = 1;
         [AllowedValues(10, 20, 50, 100)]
         public int PageSize { get; set; } = 10;

@@ -3,6 +3,8 @@ using AppConfiguration;
 using DataEntity;
 using InterfaceProject.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Repository;
@@ -10,6 +12,7 @@ using Repository.Database;
 using Serilog;
 using Service;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -39,7 +42,8 @@ namespace API
                 builder.Services.RegisterDIServices(_config);
                 builder.Services.RegisterDIRepository();
                 builder.Services.RegisterDIEntity();
-                
+                builder.Services.AddScoped<BaseResponse>();
+
                 builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters()
                     {
@@ -56,18 +60,16 @@ namespace API
                 builder.Services.AddControllers();
                 builder.Services.Configure<ApiBehaviorOptions>(opt =>
                 {
-                    // This is here to make sure that validation errors caught in the request pipeline get logged
+                    BaseResponse resp = new();
                     opt.InvalidModelStateResponseFactory = context =>
                     {
-                        ValidationProblemDetails problemDetails = new(context.ModelState)
+                        var errorCollection = new Dictionary<string, object>();
+                        foreach (var item in context.ModelState)
                         {
-                            Title = "Validation Error",
-                            Type = "https://datatracker.ietf.org/doc/html/rfc7807",
-                            Status = StatusCodes.Status400BadRequest,
-                            Detail = "The request contained validation error(s)"
-                        };
-                        // ... log the errors here ...
-                        return new BadRequestObjectResult(context.ModelState);
+                            errorCollection.Add(item.Key, item.Value.Errors.Select(x => x.ErrorMessage));
+                        }
+                        resp.errorProperty = errorCollection;
+                        return new BadRequestObjectResult(resp);
                     };
                 });
 

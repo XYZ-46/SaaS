@@ -7,7 +7,9 @@ namespace DataEntity.Validation
     {
         public LoginRequestValidator()
         {
-            RuleFor(x => x.Username).NotNull().NotEmpty().WithMessage("{PropertyName} is required, can not empty");
+            RuleFor(x => x.Username)
+                .NotNull().NotEmpty().WithMessage("{PropertyName} gak boleh kosong")
+                .MinimumLength(5).WithMessage("kependekan");
             RuleFor(x => x.Password).NotNull().NotEmpty().WithMessage("{PropertyName} is required, can not empty");
         }
     }
