@@ -1,5 +1,4 @@
-﻿using DataEntity.Request;
-using DataEntity.Validation;
+﻿using DataEntity.Validation;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +11,7 @@ namespace DataEntity
         {
             return services
                 .AddFluentValidationAutoValidation()
-                .AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
+                .AddValidatorsFromAssemblyContaining<LoginRequestValidator>();
         }
     }
 }

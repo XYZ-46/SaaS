@@ -54,6 +54,22 @@ namespace API
 
                 builder.Services.AddDbContext<AzureDB>(options => options.UseSqlServer(_config.GetSection("Database:Azure").Value));
                 builder.Services.AddControllers();
+                builder.Services.Configure<ApiBehaviorOptions>(opt =>
+                {
+                    // This is here to make sure that validation errors caught in the request pipeline get logged
+                    opt.InvalidModelStateResponseFactory = context =>
+                    {
+                        ValidationProblemDetails problemDetails = new(context.ModelState)
+                        {
+                            Title = "Validation Error",
+                            Type = "https://datatracker.ietf.org/doc/html/rfc7807",
+                            Status = StatusCodes.Status400BadRequest,
+                            Detail = "The request contained validation error(s)"
+                        };
+                        // ... log the errors here ...
+                        return new BadRequestObjectResult(context.ModelState);
+                    };
+                });
 
                 builder.Host.UseSerilog((hostBuilderContext, service, loggerConfig) =>
                 {
