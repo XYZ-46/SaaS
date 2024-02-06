@@ -1,4 +1,5 @@
-﻿using DataEntity.Request;
+﻿using API.Pagination;
+using DataEntity.Request;
 using InterfaceProject.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,13 @@ namespace API.Controllers
         public async Task<IActionResult> Register(UserRegisterRequest userRegisterParamReq)
         {
             await _userService.Register(userRegisterParamReq);
+            return Ok();
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Paging(PagingRequest pagingRequest)
+        {
+
             return Ok();
         }
      

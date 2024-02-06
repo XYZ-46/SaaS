@@ -4,9 +4,9 @@ namespace InterfaceProject.Repository
 {
     public interface IUserProfileRepository : IBaseCrudRepository<UserProfileModel>
     {
-        public Task<UserProfileModel?> FindByUserLoginIdAsync(int userLoginId);
-        public Task<UserProfileModel?> FindByEmailAsync(string email);
-        public Task<UserProfileModel?> FindByFullNameAsync(string fullname);
-        public Task<UserProfileModel?> FindByUserLoginUsernameAsync(string username);
+        Task<UserProfileModel?> FindByUserLoginIdAsync(int userLoginId);
+        Task<UserProfileModel?> FindByEmailAsync(string email);
+        Task<UserProfileModel?> FindByFullNameAsync(string fullname);
+        Task<UserProfileModel?> FindByUserLoginUsernameAsync(string username);
     }
 }

@@ -11,13 +11,13 @@ namespace Repository
 
         public async Task<T?> FindByIdAsync(T TModel)
         {
-            T? existingTModel = await _azureDB.Set<T>().AsNoTracking().SingleOrDefaultAsync(x => x.Id.Equals(TModel.Id));
+            T? existingTModel = await _azureDB.Set<T>().SingleOrDefaultAsync(x => x.Id.Equals(TModel.Id));
             return existingTModel;
         }
 
         public async Task<T?> FindByIdAsync(int Id)
         {
-            T? existingTModel = await _azureDB.Set<T>().AsNoTracking().SingleOrDefaultAsync(x => x.Id.Equals(Id));
+            T? existingTModel = await _azureDB.Set<T>().SingleOrDefaultAsync(x => x.Id.Equals(Id));
             return existingTModel;
         }
 
@@ -51,5 +51,7 @@ namespace Repository
 
             return result;
         }
+
+        public IQueryable<T> GetQueryable() => _azureDB.Set<T>().AsQueryable();
     }
 }
