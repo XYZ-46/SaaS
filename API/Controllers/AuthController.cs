@@ -27,12 +27,5 @@ namespace API.Controllers
         {
             return Ok();
         }
-
-        [HttpGet("test")]
-        public async Task<IActionResult> test()
-        {
-            PagingRequest request = new PagingRequest();
-            return Ok(request);
-        }
     }
 }

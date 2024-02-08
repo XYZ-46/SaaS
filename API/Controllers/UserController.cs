@@ -17,7 +17,7 @@ namespace API.Controllers
         }
 
         [HttpGet("paging")]
-        public async Task<IActionResult> Paging(PagingRequest pagingRequest)
+        public async Task<IActionResult> Paging(PagingRequest? pagingRequest)
         {
 
             return Ok();
