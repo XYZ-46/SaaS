@@ -4,7 +4,7 @@ namespace API.Pagination
 {
     public static class OrderBy
     {
-        public static IQueryable<T> OrderByField<T>(this IQueryable<T> query, string SortField, bool Ascending)
+        public static IQueryable<T> OrderByQuery<T>(this IQueryable<T> query, string SortField, bool Ascending)
         {
             var param = Expression.Parameter(typeof(T), "p");
             var prop = Expression.Property(param, SortField);

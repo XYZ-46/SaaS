@@ -1,4 +1,5 @@
-﻿using DataEntity.Request;
+﻿using API.Pagination;
+using DataEntity.Request;
 using InterfaceProject.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,13 @@ namespace API.Controllers
         public async Task<IActionResult> ForgotPassword()
         {
             return Ok();
+        }
+
+        [HttpGet("test")]
+        public async Task<IActionResult> test()
+        {
+            PagingRequest request = new PagingRequest();
+            return Ok(request);
         }
     }
 }
