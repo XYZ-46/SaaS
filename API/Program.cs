@@ -4,7 +4,6 @@ using DataEntity;
 using InterfaceProject.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Repository;
@@ -12,10 +11,11 @@ using Repository.Database;
 using Serilog;
 using Service;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace API
 {
@@ -57,7 +57,17 @@ namespace API
                     });
 
                 builder.Services.AddDbContext<AzureDB>(options => options.UseSqlServer(_config.GetSection("Database:Azure").Value));
-                builder.Services.AddControllers();
+                builder.Services.AddControllers()
+                    .AddJsonOptions(opt =>
+                    {
+                        opt.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                        opt.JsonSerializerOptions.AllowTrailingCommas = true;
+                        opt.JsonSerializerOptions.WriteIndented = true;
+                        opt.JsonSerializerOptions.PropertyNamingPolicy = null;
+                        opt.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
+                        opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    });
+
                 builder.Services.Configure<ApiBehaviorOptions>(opt =>
                 {
                     BaseResponse resp = new();
