@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace API.Pagination
+namespace DataEntity.Pagination
 {
     public static class OrderBy
     {

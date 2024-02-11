@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace API.Pagination
+namespace DataEntity.Pagination
 {
     public class Paging
     {

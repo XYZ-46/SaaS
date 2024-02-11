@@ -1,7 +1,7 @@
-﻿using DataEntity.Validation;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace DataEntity
 {
@@ -10,8 +10,8 @@ namespace DataEntity
         public static IServiceCollection RegisterDIEntity(this IServiceCollection services)
         {
             return services
-                .AddFluentValidationAutoValidation()
-                .AddValidatorsFromAssemblyContaining<LoginRequestValidator>();
+                .AddFluentValidationAutoValidation(fv => fv.DisableDataAnnotationsValidation = true)
+                .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

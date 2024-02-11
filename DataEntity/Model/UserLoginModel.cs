@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DataEntity.Model
 {
     [Table("UserLogin")]
-    public record UserLoginModel : BaseEntity
+    public class UserLoginModel : BaseEntity
     {
         [Required]
         public string Username { get; set; }

@@ -5,6 +5,6 @@
         public object message { get; set; }
         public object errorMessage { get; set; }
         public object errorProperty { get; set; }
-        public object data { get; set; }
+        public object data { get; set; } = new object();
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace API.Pagination
+namespace DataEntity.Pagination
 {
     public class PaginatedList<T> : List<T>
     {
