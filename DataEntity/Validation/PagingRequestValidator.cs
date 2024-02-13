@@ -4,28 +4,26 @@ using FluentValidation;
 
 namespace DataEntity.Validation
 {
-    public class PagingUserRequestValidator : AbstractValidator<PagingRequest<UserProfileModel>>
+    public class PagingRequestValidator : AbstractValidator<PagingRequest>
     {
 
-        public PagingUserRequestValidator()
+        public PagingRequestValidator()
         {
 
-            RuleForEach(x => x.Search).SetValidator(new SearchUserRequestValidator());
-            RuleForEach(x => x.Sort).SetValidator(new SortUserRequestValidator());
+            RuleForEach(x => x.Search).SetValidator(new SearchCriteriaValidator());
+            RuleForEach(x => x.Sort).SetValidator(new SortCriteriaValidator());
 
             RuleFor(x => x.Sort).Must(list => list?.Count <= 2).WithMessage("Maximum number of Sort items is 2");
-            //.Must(ls => ls?.GroupBy(z => z.PropertyNameOrder).ToList().Count == ls?.Count);
             RuleFor(x => x.Sort)
                 .Must(list => list?.GroupBy(z => z.PropertyNameOrder).ToList().Count == list?.Count)
                 .WithMessage("Sort items must be unique");
         }
     }
 
-    public class SearchUserRequestValidator : AbstractValidator<SearchCriteria<UserProfileModel>>
+    public class SearchCriteriaValidator : AbstractValidator<SearchCriteria>
     {
-        public SearchUserRequestValidator()
+        public SearchCriteriaValidator()
         {
-
             RuleFor(x => x.PropertyName).NotNull().NotEmpty();
 
             When(x => !x.Operator.Equals("between", StringComparison.OrdinalIgnoreCase), () =>
@@ -42,11 +40,8 @@ namespace DataEntity.Validation
 
     }
 
-    public class SortUserRequestValidator : AbstractValidator<SortCriteria<UserProfileModel>>
+    public class SortCriteriaValidator : AbstractValidator<SortCriteria>
     {
-        public SortUserRequestValidator()
-        {
-            RuleFor(x => x.PropertyNameOrder).NotNull().NotEmpty();
-        }
+        public SortCriteriaValidator() => RuleFor(x => x.PropertyNameOrder).NotNull().NotEmpty();
     }
 }

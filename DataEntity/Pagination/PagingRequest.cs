@@ -1,8 +1,7 @@
 ﻿namespace DataEntity.Pagination
 {
-    public class PagingRequest<TModel> where TModel : class
+    public class PagingRequest
     {
-
         public int? PageNumber { get; set; } = 1;
 
         private PageSizeEnum _pageSize { get; set; } = PageSizeEnum.SEPULUH;
@@ -16,11 +15,11 @@
             }
         }
 
-        public List<SearchCriteria<TModel>>? Search { get; set; } = [];
-        public List<SortCriteria<TModel>>? Sort { get; set; } = [];
+        public List<SearchCriteria>? Search { get; set; } = [];
+        public List<SortCriteria>? Sort { get; set; } = [];
     }
 
-    public class SearchCriteria<TModel> where TModel : class
+    public class SearchCriteria
     {
         public string PropertyName { get; set; }
         public string? PropertyValue { get; set; }
@@ -28,7 +27,7 @@
         public string? PropertyValue1 { get; set; }
         public string? PropertyValue2 { get; set; }
     }
-    public class SortCriteria<TModel> where TModel : class
+    public class SortCriteria
     {
         public const string ORDER_BY_DESCENDING = "desc";
 
