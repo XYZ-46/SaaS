@@ -1,15 +1,12 @@
-﻿using DataEntity.Model;
-using DataEntity.Pagination;
+﻿using DataEntity.Pagination;
 using FluentValidation;
 
 namespace DataEntity.Validation
 {
     public class PagingRequestValidator : AbstractValidator<PagingRequest>
     {
-
         public PagingRequestValidator()
         {
-
             RuleForEach(x => x.Search).SetValidator(new SearchCriteriaValidator());
             RuleForEach(x => x.Sort).SetValidator(new SortCriteriaValidator());
 

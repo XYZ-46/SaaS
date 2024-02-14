@@ -10,7 +10,8 @@ namespace DataEntity
         public static IServiceCollection RegisterDIEntity(this IServiceCollection services)
         {
             return services
-                .AddFluentValidationAutoValidation(fv => fv.DisableDataAnnotationsValidation = true)
+                .AddFluentValidationAutoValidation()
+                //.AddFluentValidationAutoValidation(fv => fv.DisableDataAnnotationsValidation = true)
                 .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }

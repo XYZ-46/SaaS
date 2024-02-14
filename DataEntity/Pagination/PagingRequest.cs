@@ -15,6 +15,7 @@
             }
         }
 
+        //[ValidPropertyValidation]
         public List<SearchCriteria>? Search { get; set; } = [];
         public List<SortCriteria>? Sort { get; set; } = [];
     }
