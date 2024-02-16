@@ -1,4 +1,5 @@
-﻿using DataEntity.Pagination;
+﻿using DataEntity.Model;
+using DataEntity.Pagination;
 using DataEntity.Request;
 using InterfaceProject.Service;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,15 @@ namespace API.Controllers
         [HttpGet("paging")]
         public async Task<IActionResult> Paging(PagingRequest pagingRequest)
         {
+            var (isValidRequest, errorList) = pagingRequest.ValidateModel<UserProfileModel>();
+
+            BaseResponse response = new();
+
+            if (!isValidRequest)
+            {
+                response.errorProperty = errorList;
+                return BadRequest(response);
+            }
 
             return Ok(pagingRequest);
         }
