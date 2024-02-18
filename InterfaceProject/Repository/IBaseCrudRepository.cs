@@ -2,14 +2,14 @@
 
 namespace InterfaceProject.Repository
 {
-    public interface IBaseCrudRepository<T> where T : BaseEntity
+    public interface IBaseCrudRepository<TModel> where TModel : BaseEntity
     {
-        public Task<T?> FindByIdAsync(T TModel);
-        public Task<T?> FindByIdAsync(int Id);
+        public Task<TModel?> FindByIdAsync(TModel TModel);
+        public Task<TModel?> FindByIdAsync(int Id);
 
-        public Task<T> InsertAsync(T TModel);
-        public Task<T> UpdateAsync(T TModel);
+        public Task<TModel> InsertAsync(TModel TModel);
+        public Task<TModel> UpdateAsync(TModel TModel);
 
-        public Task<bool> DeleteAsync(T TModel);
+        public Task<bool> DeleteAsync(TModel TModel);
     }
 }

@@ -9,6 +9,7 @@ namespace Repository
         {
             return services
                 .AddScoped<IUserLoginRepository, UserLoginRepository>()
+                //.AddScoped<IBaseQueryRepository, BaseQueryRepository<>>()
                 .AddScoped<IUserProfileRepository, UserProfileRepository>();
         }
     }

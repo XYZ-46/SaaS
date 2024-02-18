@@ -45,8 +45,5 @@ namespace Repository
             var userProfile = await _azureDB.UserProfileModel.SingleOrDefaultAsync(x => x.UserLoginId == userLoginId && !x.IsDelete);
             return userProfile;
         }
-
-        public IQueryable<UserProfileModel> Paging() => _azureDB.UserProfileModel.AsQueryable();
-
     }
 }

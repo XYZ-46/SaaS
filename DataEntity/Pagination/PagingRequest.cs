@@ -1,10 +1,12 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace DataEntity.Pagination
 {
     public class PagingRequest
     {
-        public int? PageNumber { get; set; } = 1;
+        public int? PageIndex { get; set; } = 1;
 
         private PageSizeEnum _pageSize { get; set; } = PageSizeEnum.SEPULUH;
         public int PageSize
@@ -17,9 +19,8 @@ namespace DataEntity.Pagination
             }
         }
 
-        //[ValidPropertyValidation]
-        public List<SearchCriteria>? Search { get; set; } = [];
-        public List<SortCriteria>? Sort { get; set; } = [];
+        public List<SearchCriteria> Search { get; set; } = [];
+        public List<SortCriteria> Sort { get; set; } = [];
 
         public (bool, Dictionary<string, object>) ValidateModel<TModel>() where TModel : class
         {
@@ -42,16 +43,20 @@ namespace DataEntity.Pagination
             if (Sort != null)
             {
                 List<string> sortErrorList = [];
-                foreach (var itemSort in Sort)
-                {
-                    prop = typeof(TModel).GetProperty(itemSort.PropertyNameOrder, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-
-                    if (string.IsNullOrWhiteSpace(itemSort.PropertyNameOrder)) sortErrorList.Add("The PropertyNameOrder field is required");
-                    else if (prop is null) sortErrorList.Add($"Unknown property {itemSort.PropertyNameOrder}");
-                }
 
                 if (Sort.Count > 2) sortErrorList.Add("Maximum number of Sort items is 2");
                 if (Sort.GroupBy(x => x.PropertyNameOrder).Any(x => x.Count() > 1)) sortErrorList.Add("Sort items must be unique");
+
+                if (sortErrorList.Count == 0)
+                {
+                    foreach (var itemSort in Sort)
+                    {
+                        prop = typeof(TModel).GetProperty(itemSort.PropertyNameOrder, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
+                        if (string.IsNullOrWhiteSpace(itemSort.PropertyNameOrder)) sortErrorList.Add("The PropertyNameOrder field is required");
+                        else if (prop is null) sortErrorList.Add($"Unknown property {itemSort.PropertyNameOrder}");
+                    }
+                }
 
                 if (sortErrorList.Count > 0) errorList.Add("Sort", sortErrorList);
             }
@@ -60,14 +65,26 @@ namespace DataEntity.Pagination
             return (isValid, errorList);
         }
 
+        public static List<TModel> GetData<TModel>()
+        {
+            var _pageData = new List<TModel>();
+
+            return _pageData;
+        }
+
         static bool CanConvert(string value, Type type)
         {
             bool result = false;
 
             if (string.IsNullOrEmpty(value) || type == null) return result;
 
-            System.ComponentModel.TypeConverter conv = System.ComponentModel.TypeDescriptor.GetConverter(type);
-            if (conv.CanConvertFrom(typeof(string)))
+            TypeConverter conv = TypeDescriptor.GetConverter(type);
+
+            if (type.Name == "DateTime")
+            {
+                result = DateTime.TryParseExact(value, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out _);
+            }
+            else if (conv.CanConvertFrom(typeof(string)))
             {
                 try
                 {

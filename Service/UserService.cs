@@ -1,4 +1,6 @@
 ﻿using DataEntity.Mapper;
+using DataEntity.Model;
+using DataEntity.Pagination;
 using DataEntity.Request;
 using InterfaceProject.Repository;
 using InterfaceProject.Service;
@@ -8,7 +10,8 @@ using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace Service
 {
-    public class UserService(ILogger<UserService> logger, IUserLoginRepository userLoginRepo, IUserProfileRepository userProfileRepo) : IUserService
+    public class UserService(ILogger<UserService> logger, IUserLoginRepository userLoginRepo, IUserProfileRepository userProfileRepo)
+        : IUserService
     {
         private readonly IUserLoginRepository _userLoginRepo = userLoginRepo;
 
@@ -38,5 +41,14 @@ namespace Service
                 throw;
             }
         }
+
+        public PaginatedDataList<UserProfileModel> GetPagingData(PagingRequest pageRequest)
+        {
+            var pageData = new PaginatedDataList<UserProfileModel>(pageRequest);
+
+            return pageData;
+        }
+
+
     }
 }

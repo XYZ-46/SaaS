@@ -3,6 +3,7 @@ using DataEntity.Pagination;
 using DataEntity.Request;
 using InterfaceProject.Service;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.SqlServer.Server;
 
 namespace API.Controllers
 {
@@ -20,11 +21,15 @@ namespace API.Controllers
         [HttpGet("paging")]
         public async Task<IActionResult> Paging(PagingRequest pagingRequest)
         {
-            var (isValidRequest, errorList) = pagingRequest.ValidateModel<UserProfileModel>();
 
             BaseResponse response = new();
+            var (isValidRequest, errorList) = pagingRequest.ValidateModel<UserProfileModel>();
 
-            if (!isValidRequest)
+            if (isValidRequest)
+            {
+                //response = PagingRequest.GetData<UserProfileModel>();
+            }
+            else
             {
                 response.errorProperty = errorList;
                 return BadRequest(response);
