@@ -1,4 +1,4 @@
-﻿using InterfaceProject.Repository;
+﻿using InterfaceProject;
 using Repository.Database;
 
 namespace Repository

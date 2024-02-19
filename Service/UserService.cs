@@ -2,20 +2,19 @@
 using DataEntity.Model;
 using DataEntity.Pagination;
 using DataEntity.Request;
-using InterfaceProject.Repository;
-using InterfaceProject.Service;
+using InterfaceProject.User;
 using Microsoft.Extensions.Logging;
 using System.Transactions;
 using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace Service
 {
-    public class UserService(ILogger<UserService> logger, IUserLoginRepository userLoginRepo, IUserProfileRepository userProfileRepo)
+    public class UserService(ILogger<UserService> logger, IUserLoginCrudRepo userLoginRepo, IUserProfileCrudRepo userProfileRepo)
         : IUserService
     {
-        private readonly IUserLoginRepository _userLoginRepo = userLoginRepo;
+        private readonly IUserLoginCrudRepo _userLoginRepo = userLoginRepo;
 
-        private readonly IUserProfileRepository _userProfileRepo = userProfileRepo;
+        private readonly IUserProfileCrudRepo _userProfileRepo = userProfileRepo;
         private readonly ILogger<UserService> _logger = logger;
 
         public async Task Register(UserRegisterRequest userRegisterParam)

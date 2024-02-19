@@ -1,8 +1,8 @@
 ﻿using DataEntity.Model;
 
-namespace InterfaceProject.Repository
+namespace InterfaceProject.User
 {
-    public interface IUserLoginRepository : IBaseCrudRepository<UserLoginModel>
+    public interface IUserLoginCrudRepo : IBaseCrudRepository<UserLoginModel>
     {
         public Task<UserLoginModel?> FindByUsernameAsync(string username);
     }

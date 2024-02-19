@@ -1,6 +1,4 @@
-﻿using DataEntity.Pagination;
-
-namespace InterfaceProject.Repository
+﻿namespace InterfaceProject
 {
     public interface IBaseQueryRepository
     {

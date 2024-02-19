@@ -1,5 +1,6 @@
 ﻿using AppConfiguration;
 using InterfaceProject.Service;
+using InterfaceProject.User;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

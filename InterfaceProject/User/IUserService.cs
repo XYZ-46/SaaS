@@ -1,8 +1,8 @@
 ﻿using DataEntity.Request;
 
-namespace InterfaceProject.Service
+namespace InterfaceProject.User
 {
-    public interface IUserService 
+    public interface IUserService
     {
         public Task Register(UserRegisterRequest userRegisterParam);
     }

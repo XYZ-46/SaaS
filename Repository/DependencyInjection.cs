@@ -1,5 +1,6 @@
-﻿using InterfaceProject.Repository;
+﻿using InterfaceProject.User;
 using Microsoft.Extensions.DependencyInjection;
+using Repository.User;
 
 namespace Repository
 {
@@ -8,9 +9,9 @@ namespace Repository
         public static IServiceCollection RegisterDIRepository(this IServiceCollection services)
         {
             return services
-                .AddScoped<IUserLoginRepository, UserLoginRepository>()
+                .AddScoped<IUserLoginCrudRepo, UserLoginCrudRepo>()
                 //.AddScoped<IBaseQueryRepository, BaseQueryRepository<>>()
-                .AddScoped<IUserProfileRepository, UserProfileRepository>();
+                .AddScoped<IUserProfileCrudRepo, UserProfileCrudRepo>();
         }
     }
 }

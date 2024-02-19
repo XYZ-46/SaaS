@@ -1,57 +1,57 @@
 ﻿using DataEntity;
-using InterfaceProject.Repository;
+using InterfaceProject;
 using Microsoft.EntityFrameworkCore;
 using Repository.Database;
 
 namespace Repository
 {
-    public abstract class BaseCrudRepository<T>(AzureDB azureDB) : IBaseCrudRepository<T> where T : BaseEntity
+    public abstract class BaseCrudRepository<TModel>(AzureDB azureDB) : IBaseCrudRepository<TModel> where TModel : BaseEntity
     {
         public readonly AzureDB _azureDB = azureDB;
 
-        public async Task<T?> FindByIdAsync(T TModel)
+        public async Task<TModel?> FindByIdAsync(TModel Tmodel)
         {
-            T? existingTModel = await _azureDB.Set<T>().SingleOrDefaultAsync(x => x.Id.Equals(TModel.Id));
+            TModel? existingTModel = await _azureDB.Set<TModel>().SingleOrDefaultAsync(x => x.Id.Equals(Tmodel.Id));
             return existingTModel;
         }
 
-        public async Task<T?> FindByIdAsync(int Id)
+        public async Task<TModel?> FindByIdAsync(int Id)
         {
-            T? existingTModel = await _azureDB.Set<T>().SingleOrDefaultAsync(x => x.Id.Equals(Id));
+            TModel? existingTModel = await _azureDB.Set<TModel>().SingleOrDefaultAsync(x => x.Id.Equals(Id));
             return existingTModel;
         }
 
-        public async Task<T> InsertAsync(T TModel)
+        public async Task<TModel> InsertAsync(TModel Tmodel)
         {
-            _azureDB.Set<T>().Add(TModel);
+            _azureDB.Set<TModel>().Add(Tmodel);
             await _azureDB.SaveChangesAsync();
-            return TModel;
+            return Tmodel;
         }
 
-        public async Task<T> UpdateAsync(T TModel)
+        public async Task<TModel> UpdateAsync(TModel Tmodel)
         {
-            _ = await FindByIdAsync(TModel.Id) ?? throw new DbUpdateException("No Data Found For Updated");
+            _ = await FindByIdAsync(Tmodel.Id) ?? throw new DbUpdateException("No Data Found For Updated");
 
-            _azureDB.Set<T>().Update(TModel);
+            _azureDB.Set<TModel>().Update(Tmodel);
             await _azureDB.SaveChangesAsync();
-            return TModel;
+            return Tmodel;
         }
 
-        public async Task<bool> DeleteAsync(T TModel)
+        public async Task<bool> DeleteAsync(TModel Tmodel)
         {
             bool result = false;
 
-            T? existingTModel = await FindByIdAsync(TModel.Id);
+            TModel? existingTModel = await FindByIdAsync(Tmodel.Id);
             if (existingTModel != null)
             {
-                TModel.IsDelete = true;
-                await UpdateAsync(TModel);
+                Tmodel.IsDelete = true;
+                await UpdateAsync(Tmodel);
                 result = true;
             }
 
             return result;
         }
 
-        public IQueryable<T> GetQueryable() => _azureDB.Set<T>().AsQueryable();
+        public virtual IQueryable<TModel> BaseQuery(int rowSize) => _azureDB.Set<TModel>().Take(rowSize).AsQueryable();
     }
 }

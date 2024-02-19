@@ -1,17 +1,17 @@
 ﻿using InterfaceProject.Service;
 using BCryptNet = BCrypt.Net.BCrypt;
 using System.Security.Authentication;
-using InterfaceProject.Repository;
 using DataEntity.Request;
 using DataEntity.Model;
+using InterfaceProject.User;
 
 namespace Service
 {
-    public class AuthService(IJwtTokenService jwtTokenService, IUserProfileRepository userProfileRepo)
+    public class AuthService(IJwtTokenService jwtTokenService, IUserProfileCrudRepo userProfileRepo)
         : IAuthService
     {
         private readonly IJwtTokenService _jwtTokenService = jwtTokenService;
-        public readonly IUserProfileRepository _userProfileRepo = userProfileRepo;
+        public readonly IUserProfileCrudRepo _userProfileRepo = userProfileRepo;
 
         public async Task ForgotPassword()
         {

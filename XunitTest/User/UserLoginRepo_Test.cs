@@ -1,7 +1,7 @@
 ﻿using DataEntity.Model;
 using Microsoft.EntityFrameworkCore;
-using Repository;
 using Repository.Database;
+using Repository.User;
 
 namespace XunitTest.User
 {
@@ -13,7 +13,7 @@ namespace XunitTest.User
         public async Task UserLogin_CRUD_positiveTest()
         {
             // Arrange
-            var repo = new UserLoginRepository(_azureDB);
+            var repo = new UserLoginCrudRepo(_azureDB);
             var userLogin = new UserLoginModel()
             {
                 Username = Guid.NewGuid().ToString(),
@@ -70,7 +70,7 @@ namespace XunitTest.User
         {
 
             // Arrange
-            var repo = new UserLoginRepository(_azureDB);
+            var repo = new UserLoginCrudRepo(_azureDB);
             var userLogin = new UserLoginModel();
 
             Task actInsert() => repo.InsertAsync(userLogin);

@@ -1,7 +1,7 @@
 ﻿using DataEntity.Model;
 using DataEntity.Pagination;
 using DataEntity.Request;
-using InterfaceProject.Service;
+using InterfaceProject.User;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.SqlServer.Server;
 

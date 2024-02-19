@@ -1,6 +1,6 @@
 ﻿using DataEntity;
 
-namespace InterfaceProject.Repository
+namespace InterfaceProject
 {
     public interface IBaseCrudRepository<TModel> where TModel : BaseEntity
     {
@@ -11,5 +11,8 @@ namespace InterfaceProject.Repository
         public Task<TModel> UpdateAsync(TModel TModel);
 
         public Task<bool> DeleteAsync(TModel TModel);
+
+        IQueryable<TModel> BaseQuery(int rowSize);
+
     }
 }

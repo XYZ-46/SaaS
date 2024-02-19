@@ -1,12 +1,14 @@
 ﻿using DataEntity.Model;
-using InterfaceProject.Repository;
+using InterfaceProject.User;
 using Microsoft.EntityFrameworkCore;
 using Repository.Database;
 
-namespace Repository
+namespace Repository.User
 {
-    public class UserLoginRepository(AzureDB azureDB) : BaseCrudRepository<UserLoginModel>(azureDB), IUserLoginRepository
+    public class UserLoginCrudRepo(AzureDB azureDB) : BaseCrudRepository<UserLoginModel>(azureDB), IUserLoginCrudRepo
     {
+        //public override IQueryable<UserLoginModel> BaseQuery(int rowSize) => _azureDB.Set<UserLoginModel>().AsQueryable<UserLoginModel>();
+
         public async Task<UserLoginModel?> FindByUsernameAsync(string username)
         {
             var userLogin = await _azureDB.UserLoginModel.SingleOrDefaultAsync(x => x.Username == username && !x.IsDelete);

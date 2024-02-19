@@ -1,13 +1,13 @@
 ﻿using DataEntity.Model;
-using InterfaceProject.Repository;
 using InterfaceProject.Service;
+using InterfaceProject.User;
 using Microsoft.EntityFrameworkCore;
 using Repository.Database;
 
-namespace Repository
+namespace Repository.User
 {
-    public class UserProfileRepository(AzureDB azureDB, IRedisService cacheHandler)
-        : BaseCrudRepository<UserProfileModel>(azureDB), IUserProfileRepository
+    public class UserProfileCrudRepo(AzureDB azureDB, IRedisService cacheHandler)
+        : BaseCrudRepository<UserProfileModel>(azureDB), IUserProfileCrudRepo
     {
         private readonly IRedisService _cacheHandler = cacheHandler;
 
@@ -45,5 +45,8 @@ namespace Repository
             var userProfile = await _azureDB.UserProfileModel.SingleOrDefaultAsync(x => x.UserLoginId == userLoginId && !x.IsDelete);
             return userProfile;
         }
+
+        public override IQueryable<UserProfileModel> BaseQuery(int rowSize) => _azureDB.Set<UserProfileModel>().AsQueryable<UserProfileModel>();
+
     }
 }
