@@ -6,8 +6,8 @@ using Repository.Database;
 
 namespace Repository.User
 {
-    public class UserProfileCrudRepo(AzureDB azureDB, IRedisService cacheHandler)
-        : BaseCrudRepository<UserProfileModel>(azureDB), IUserProfileCrudRepo
+    public class UserProfileRepository(AzureDB azureDB, IRedisService cacheHandler)
+        : BaseRepository<UserProfileModel>(azureDB), IUserProfileRepository
     {
         private readonly IRedisService _cacheHandler = cacheHandler;
 
@@ -46,7 +46,7 @@ namespace Repository.User
             return userProfile;
         }
 
-        public override IQueryable<UserProfileModel> BaseQuery(int rowSize) => _azureDB.Set<UserProfileModel>().AsQueryable<UserProfileModel>();
+        public override IQueryable<UserProfileModel> BaseQuery() => _azureDB.Set<UserProfileModel>().AsQueryable<UserProfileModel>();
 
     }
 }

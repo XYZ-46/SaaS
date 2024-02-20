@@ -6,7 +6,7 @@ namespace DataEntity.Pagination
 {
     public class PagingRequest
     {
-        public int? PageIndex { get; set; } = 1;
+        public int PageIndex { get; set; } = 1;
 
         private PageSizeEnum _pageSize { get; set; } = PageSizeEnum.SEPULUH;
         public int PageSize

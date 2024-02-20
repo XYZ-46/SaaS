@@ -5,7 +5,7 @@ using Repository.Database;
 
 namespace Repository.User
 {
-    public class UserLoginCrudRepo(AzureDB azureDB) : BaseCrudRepository<UserLoginModel>(azureDB), IUserLoginCrudRepo
+    public class UserLoginRepository(AzureDB azureDB) : BaseRepository<UserLoginModel>(azureDB), IUserLoginRepository
     {
         //public override IQueryable<UserLoginModel> BaseQuery(int rowSize) => _azureDB.Set<UserLoginModel>().AsQueryable<UserLoginModel>();
 

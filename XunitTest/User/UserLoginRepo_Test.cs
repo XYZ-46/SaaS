@@ -13,7 +13,7 @@ namespace XunitTest.User
         public async Task UserLogin_CRUD_positiveTest()
         {
             // Arrange
-            var repo = new UserLoginCrudRepo(_azureDB);
+            var repo = new UserLoginRepository(_azureDB);
             var userLogin = new UserLoginModel()
             {
                 Username = Guid.NewGuid().ToString(),
@@ -70,7 +70,7 @@ namespace XunitTest.User
         {
 
             // Arrange
-            var repo = new UserLoginCrudRepo(_azureDB);
+            var repo = new UserLoginRepository(_azureDB);
             var userLogin = new UserLoginModel();
 
             Task actInsert() => repo.InsertAsync(userLogin);

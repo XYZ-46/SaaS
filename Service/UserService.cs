@@ -9,12 +9,12 @@ using BCryptNet = BCrypt.Net.BCrypt;
 
 namespace Service
 {
-    public class UserService(ILogger<UserService> logger, IUserLoginCrudRepo userLoginRepo, IUserProfileCrudRepo userProfileRepo)
+    public class UserService(ILogger<UserService> logger, IUserLoginRepository userLoginRepo, IUserProfileRepository userProfileRepo)
         : IUserService
     {
-        private readonly IUserLoginCrudRepo _userLoginRepo = userLoginRepo;
+        private readonly IUserLoginRepository _userLoginRepo = userLoginRepo;
 
-        private readonly IUserProfileCrudRepo _userProfileRepo = userProfileRepo;
+        private readonly IUserProfileRepository _userProfileRepo = userProfileRepo;
         private readonly ILogger<UserService> _logger = logger;
 
         public async Task Register(UserRegisterRequest userRegisterParam)
@@ -41,11 +41,9 @@ namespace Service
             }
         }
 
-        public PaginatedDataList<UserProfileModel> GetPagingData(PagingRequest pageRequest)
+        public PagingResponse<UserProfileModel> GetPagingData(PagingRequest pageRequest)
         {
-            var pageData = new PaginatedDataList<UserProfileModel>(pageRequest);
-
-            return pageData;
+            return PagingResponse<UserProfileModel>.ToPagedList(_userProfileRepo.BaseQuery(), pageRequest.PageIndex, pageRequest.PageSize);
         }
 
 

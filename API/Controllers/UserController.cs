@@ -3,7 +3,6 @@ using DataEntity.Pagination;
 using DataEntity.Request;
 using InterfaceProject.User;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.SqlServer.Server;
 
 namespace API.Controllers
 {
@@ -27,7 +26,7 @@ namespace API.Controllers
 
             if (isValidRequest)
             {
-                //response = PagingRequest.GetData<UserProfileModel>();
+                response.page = _userService.GetPagingData(pagingRequest);
             }
             else
             {
@@ -35,7 +34,7 @@ namespace API.Controllers
                 return BadRequest(response);
             }
 
-            return Ok(pagingRequest);
+            return Ok(response);
         }
 
     }

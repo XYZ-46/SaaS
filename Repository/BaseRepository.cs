@@ -5,7 +5,7 @@ using Repository.Database;
 
 namespace Repository
 {
-    public abstract class BaseCrudRepository<TModel>(AzureDB azureDB) : IBaseCrudRepository<TModel> where TModel : BaseEntity
+    public abstract class BaseRepository<TModel>(AzureDB azureDB) : IBaseRepository<TModel> where TModel : BaseEntity
     {
         public readonly AzureDB _azureDB = azureDB;
 
@@ -52,6 +52,6 @@ namespace Repository
             return result;
         }
 
-        public virtual IQueryable<TModel> BaseQuery(int rowSize) => _azureDB.Set<TModel>().Take(rowSize).AsQueryable();
+        public virtual IQueryable<TModel> BaseQuery() => _azureDB.Set<TModel>().AsQueryable();
     }
 }

@@ -7,11 +7,11 @@ using InterfaceProject.User;
 
 namespace Service
 {
-    public class AuthService(IJwtTokenService jwtTokenService, IUserProfileCrudRepo userProfileRepo)
+    public class AuthService(IJwtTokenService jwtTokenService, IUserProfileRepository userProfileRepo)
         : IAuthService
     {
         private readonly IJwtTokenService _jwtTokenService = jwtTokenService;
-        public readonly IUserProfileCrudRepo _userProfileRepo = userProfileRepo;
+        public readonly IUserProfileRepository _userProfileRepo = userProfileRepo;
 
         public async Task ForgotPassword()
         {

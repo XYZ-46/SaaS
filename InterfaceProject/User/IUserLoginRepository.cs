@@ -2,7 +2,7 @@
 
 namespace InterfaceProject.User
 {
-    public interface IUserLoginCrudRepo : IBaseCrudRepository<UserLoginModel>
+    public interface IUserLoginRepository : IBaseRepository<UserLoginModel>
     {
         public Task<UserLoginModel?> FindByUsernameAsync(string username);
     }

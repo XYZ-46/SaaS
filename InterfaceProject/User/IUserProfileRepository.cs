@@ -2,7 +2,7 @@
 
 namespace InterfaceProject.User
 {
-    public interface IUserProfileCrudRepo : IBaseCrudRepository<UserProfileModel>
+    public interface IUserProfileRepository : IBaseRepository<UserProfileModel>
     {
         Task<UserProfileModel?> FindByUserLoginIdAsync(int userLoginId);
         Task<UserProfileModel?> FindByEmailAsync(string email);

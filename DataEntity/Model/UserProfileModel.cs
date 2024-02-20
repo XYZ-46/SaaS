@@ -16,8 +16,6 @@ namespace DataEntity.Model
         [Required(ErrorMessage = "Fullname is required")]
         public string Fullname { get; set; }
 
-        public DateTime tEtst { get; set; }
-
         [ForeignKey("UserLoginId")]
         public UserLoginModel UserLogin { get; set; }
     }

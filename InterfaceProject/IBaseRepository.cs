@@ -2,7 +2,7 @@
 
 namespace InterfaceProject
 {
-    public interface IBaseCrudRepository<TModel> where TModel : BaseEntity
+    public interface IBaseRepository<TModel> where TModel : BaseEntity
     {
         public Task<TModel?> FindByIdAsync(TModel TModel);
         public Task<TModel?> FindByIdAsync(int Id);
@@ -12,7 +12,7 @@ namespace InterfaceProject
 
         public Task<bool> DeleteAsync(TModel TModel);
 
-        IQueryable<TModel> BaseQuery(int rowSize);
+        IQueryable<TModel> BaseQuery();
 
     }
 }

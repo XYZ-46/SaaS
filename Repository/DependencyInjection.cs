@@ -9,9 +9,9 @@ namespace Repository
         public static IServiceCollection RegisterDIRepository(this IServiceCollection services)
         {
             return services
-                .AddScoped<IUserLoginCrudRepo, UserLoginCrudRepo>()
+                .AddScoped<IUserLoginRepository, UserLoginRepository>()
                 //.AddScoped<IBaseQueryRepository, BaseQueryRepository<>>()
-                .AddScoped<IUserProfileCrudRepo, UserProfileCrudRepo>();
+                .AddScoped<IUserProfileRepository, UserProfileRepository>();
         }
     }
 }
