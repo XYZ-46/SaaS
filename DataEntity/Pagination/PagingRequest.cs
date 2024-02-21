@@ -141,29 +141,4 @@ namespace DataEntity.Pagination
             return searchErrorList;
         }
     }
-
-    public class SearchCriteria
-    {
-        public string PropertyName { get; set; }
-        public string Value { get; set; }
-        public string Operator { get; set; }
-        public string StartValue { get; set; }
-        public string EndValue { get; set; }
-    }
-
-    public class SortCriteria
-    {
-        public const string ORDER_BY_DESCENDING = "desc";
-
-        public bool IsAscending { get; set; } = true;
-        public string PropertyNameOrder { get; set; }
-    }
-
-    public enum PageSizeEnum
-    {
-        SEPULUH = 10,
-        DUA_PULUH = 20,
-        LIMA_PULUH = 50,
-        SERATUS = 100
-    }
 }
