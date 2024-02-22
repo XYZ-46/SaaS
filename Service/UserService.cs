@@ -41,11 +41,7 @@ namespace Service
             }
         }
 
-        public PagingResponse<UserProfileModel> GetPagingData(PagingRequest pageRequest)
-        {
-            return PagingResponse<UserProfileModel>.ToPagedList(_userProfileRepo.BaseQuery(), pageRequest.PageIndex, pageRequest.PageSize);
-        }
-
+        public PagingResponse<UserProfileModel> GetPagingData(PagingRequest pageRequest) => _userProfileRepo.PageData(pageRequest);
 
     }
 }

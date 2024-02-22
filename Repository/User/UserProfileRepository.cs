@@ -1,4 +1,5 @@
 ﻿using DataEntity.Model;
+using DataEntity.Pagination;
 using InterfaceProject.Service;
 using InterfaceProject.User;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +47,32 @@ namespace Repository.User
             return userProfile;
         }
 
+        public IQueryable<UserProfileModel> PageQuery(PagingRequest pageRequest)
+        {
+            var query = BaseQuery();
+            pageRequest.Sort.ForEach(srt => query = query.OrderByQuery(srt.PropertyNameOrder, srt.IsAscending));
+
+            return query;
+        }
+
+        public PagingResponse<UserProfileModel> PageData(PagingRequest pageRequest)
+        {
+            var query = PageQuery(pageRequest);
+            var data = ToPagedList(query, pageRequest.PageIndex, pageRequest.PageSize);
+
+            return data;
+        }
+
+        public static PagingResponse<UserProfileModel> ToPagedList(IQueryable<UserProfileModel> source, int pageNumber, int pageSize)
+        {
+            var count = source.Count();
+            var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            return new PagingResponse<UserProfileModel>(items, count, pageNumber, pageSize);
+        }
+
         public override IQueryable<UserProfileModel> BaseQuery() => _azureDB.Set<UserProfileModel>().AsQueryable<UserProfileModel>();
+
+        public override IQueryable<UserProfileModel> SearchQuery(List<SearchCriteria> search) => _azureDB.Set<UserProfileModel>().AsQueryable<UserProfileModel>();
 
     }
 }
