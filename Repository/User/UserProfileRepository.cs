@@ -58,9 +58,7 @@ namespace Repository.User
         public PagingResponse<UserProfileModel> PageData(PagingRequest pageRequest)
         {
             var query = PageQuery(pageRequest);
-            var data = ToPagedList(query, pageRequest.PageIndex, pageRequest.PageSize);
-
-            return data;
+            return ToPagedList(query, pageRequest.PageIndex, pageRequest.PageSize);
         }
 
         public static PagingResponse<UserProfileModel> ToPagedList(IQueryable<UserProfileModel> source, int pageNumber, int pageSize)
@@ -69,10 +67,6 @@ namespace Repository.User
             var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             return new PagingResponse<UserProfileModel>(items, count, pageNumber, pageSize);
         }
-
-        public override IQueryable<UserProfileModel> BaseQuery() => _azureDB.Set<UserProfileModel>().AsQueryable<UserProfileModel>();
-
-        public override IQueryable<UserProfileModel> SearchQuery(List<SearchCriteria> search) => _azureDB.Set<UserProfileModel>().AsQueryable<UserProfileModel>();
 
     }
 }

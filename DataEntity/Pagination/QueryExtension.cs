@@ -21,6 +21,20 @@ namespace DataEntity.Pagination
             var mce = Expression.Call(typeof(Queryable), methodOrder, types, query.Expression, exp);
             return query.Provider.CreateQuery<TModel>(mce);
         }
+
+        //public static IQueryable<TModel> FilterQuery<TModel>(this IQueryable<TModel> query, SearchCriteria search)
+        //{
+        //    var param = Expression.Parameter(typeof(TModel));
+        //    var prop = Expression.Property(param, SortField);
+        //    var exp = Expression.Lambda(prop, param);
+
+        //    // Jika sudah ada order
+        //    string methodOrder;
+
+        //    Type[] types = [query.ElementType, exp.Body.Type];
+        //    var mce = Expression.Call(typeof(Queryable), methodOrder, types, query.Expression, exp);
+        //    return query.Provider.CreateQuery<TModel>(mce);
+        //}
     }
 }
 

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Linq.Expressions;
 using System.Reflection;
 
 namespace DataEntity.Pagination
@@ -8,7 +7,7 @@ namespace DataEntity.Pagination
     {
         public int PageIndex { get; set; } = 1;
 
-        private PageSizeEnum _pageSize { get; set; } = PageSizeEnum.SEPULUH;
+        private PageSizeEnum _pageSize = PageSizeEnum.SEPULUH;
         public int PageSize
         {
             get => (int)_pageSize;
@@ -49,13 +48,13 @@ namespace DataEntity.Pagination
 
                 if (sortErrorList.Count == 0)
                 {
-                    foreach (var itemSort in Sort)
+                    Sort.ForEach(itemSort =>
                     {
                         prop = typeof(TModel).GetProperty(itemSort.PropertyNameOrder, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
 
                         if (string.IsNullOrWhiteSpace(itemSort.PropertyNameOrder)) sortErrorList.Add("The PropertyNameOrder field is required");
                         else if (prop is null) sortErrorList.Add($"Unknown property {itemSort.PropertyNameOrder}");
-                    }
+                    });
                 }
 
                 if (sortErrorList.Count > 0) errorList.Add("Sort", sortErrorList);
@@ -63,13 +62,6 @@ namespace DataEntity.Pagination
 
             if (errorList.Count == 0) isValid = true;
             return (isValid, errorList);
-        }
-
-        public static List<TModel> GetData<TModel>()
-        {
-            var _pageData = new List<TModel>();
-
-            return _pageData;
         }
 
         static bool CanConvert(string value, Type type)
@@ -104,40 +96,44 @@ namespace DataEntity.Pagination
             List<string> searchErrorList = [];
 
             if (string.IsNullOrWhiteSpace(_search.PropertyName)) searchErrorList.Add("The PropertyName field is required");
+            else if (prop is null) searchErrorList.Add($"Unknown property {_search.PropertyName}");
+
+            if (string.IsNullOrWhiteSpace(_search.Operator.ToString())) searchErrorList.Add("The Operator field is required");
+            else if (!Enum.TryParse(typeof(OperatorEnum), _search.Operator, true, out _)) searchErrorList.Add("The Operator field is invalid");
             else
             {
-                if (prop is null) searchErrorList.Add($"Unknown property {_search.PropertyName}");
+                if (_search.Operator.Equals("between", StringComparison.OrdinalIgnoreCase)
+                    || _search.Operator.Equals("NotBetween", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (string.IsNullOrWhiteSpace(_search.StartValue)) searchErrorList.Add("The StartValue field is required");
+                    if (string.IsNullOrWhiteSpace(_search.EndValue)) searchErrorList.Add("The EndValue field is required");
+                }
                 else
                 {
-                    if (string.IsNullOrWhiteSpace(_search.Operator)) searchErrorList.Add("The Operator field is required");
-                    else
-                    {
-                        if (_search.Operator == "between")
-                        {
-                            if (string.IsNullOrWhiteSpace(_search.StartValue)) searchErrorList.Add("The StartValue field is required");
-                            if (string.IsNullOrWhiteSpace(_search.EndValue)) searchErrorList.Add("The EndValue field is required");
-
-                            if (!string.IsNullOrWhiteSpace(_search.StartValue) && !string.IsNullOrWhiteSpace(_search.EndValue))
-                            {
-                                if (!CanConvert(_search.StartValue, prop.PropertyType))
-                                    searchErrorList.Add($"[{_search.StartValue}] is invalid value of type [{prop.PropertyType.Name}]");
-
-                                if (!CanConvert(_search.EndValue, prop.PropertyType))
-                                    searchErrorList.Add($"[{_search.EndValue}] is invalid value of type [{prop.PropertyType.Name}]");
-                            }
-                        }
-                        else
-                        {
-                            if (string.IsNullOrWhiteSpace(_search.Value)) searchErrorList.Add("The value field is required");
-                            else
-                            {
-                                if (!CanConvert(_search.Value, prop.PropertyType))
-                                    searchErrorList.Add($"[{_search.Value}] is invalid value of type [{prop.PropertyType.Name}]");
-                            }
-                        }
-                    }
+                    if (string.IsNullOrWhiteSpace(_search.Value)) searchErrorList.Add("The value field is required");
                 }
             }
+            if (searchErrorList.Count > 0) return searchErrorList;
+
+
+            if (_search.Operator == "between")
+            {
+                if (!string.IsNullOrWhiteSpace(_search.StartValue) && !string.IsNullOrWhiteSpace(_search.EndValue))
+                {
+                    if (!CanConvert(_search.StartValue, prop?.PropertyType))
+                        searchErrorList.Add($"[{_search.StartValue}] is invalid value of type [{prop?.PropertyType.Name}]");
+
+                    if (!CanConvert(_search.EndValue, prop?.PropertyType))
+                        searchErrorList.Add($"[{_search.EndValue}] is invalid value of type [{prop?.PropertyType.Name}]");
+                }
+            }
+            else
+            {
+                if (!CanConvert(_search.Value, prop?.PropertyType))
+                    searchErrorList.Add($"[{_search.Value}] is invalid value of type [{prop?.PropertyType.Name}]");
+            }
+
+
             return searchErrorList;
         }
     }

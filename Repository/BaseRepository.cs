@@ -1,10 +1,7 @@
 ﻿using DataEntity;
-using DataEntity.Model;
-using DataEntity.Pagination;
 using InterfaceProject;
 using Microsoft.EntityFrameworkCore;
 using Repository.Database;
-using System.Linq.Expressions;
 
 namespace Repository
 {
@@ -57,18 +54,6 @@ namespace Repository
         }
 
         public virtual IQueryable<TModel> BaseQuery() => _azureDB.Set<TModel>().AsQueryable();
-
-        public virtual IQueryable<TModel> SearchQuery(List<SearchCriteria> search)
-        {
-            return _azureDB.Set<TModel>().AsQueryable<TModel>();
-        }
-
-        public virtual IQueryable<UserProfileModel> SortQuery(List<SortCriteria> sort)
-        {
-            return _azureDB.Set<UserProfileModel>().AsQueryable<UserProfileModel>();
-        }
-
-        IQueryable<TModel> Filter<TModel>(IQueryable<TModel> queryable, Expression<Func<TModel, bool>> predicate) => queryable.Where(predicate);
 
     }
 }
