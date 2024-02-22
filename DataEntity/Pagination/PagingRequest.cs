@@ -7,14 +7,14 @@ namespace DataEntity.Pagination
     {
         public int PageIndex { get; set; } = 1;
 
-        private PageSizeEnum _pageSize = PageSizeEnum.SEPULUH;
+        private PageSizeEnm _pageSize = PageSizeEnm.SEPULUH;
         public int PageSize
         {
             get => (int)_pageSize;
             set
             {
-                if (Enum.IsDefined(typeof(PageSizeEnum), value)) _pageSize = (PageSizeEnum)value;
-                else _pageSize = PageSizeEnum.SEPULUH;
+                if (Enum.IsDefined(typeof(PageSizeEnm), value)) _pageSize = (PageSizeEnm)value;
+                else _pageSize = PageSizeEnm.SEPULUH;
             }
         }
 
@@ -99,7 +99,7 @@ namespace DataEntity.Pagination
             else if (prop is null) searchErrorList.Add($"Unknown property {_search.PropertyName}");
 
             if (string.IsNullOrWhiteSpace(_search.Operator.ToString())) searchErrorList.Add("The Operator field is required");
-            else if (!Enum.TryParse(typeof(OperatorEnum), _search.Operator, true, out _)) searchErrorList.Add("The Operator field is invalid");
+            else if (!Enum.TryParse(typeof(OperatorEnm), _search.Operator, true, out _)) searchErrorList.Add("The Operator field is invalid");
             else
             {
                 if (_search.Operator.Equals("between", StringComparison.OrdinalIgnoreCase)

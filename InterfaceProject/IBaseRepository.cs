@@ -4,13 +4,13 @@ namespace InterfaceProject
 {
     public interface IBaseRepository<TModel> where TModel : BaseEntity
     {
-        public Task<TModel?> FindByIdAsync(TModel TModel);
+        public Task<TModel?> FindByIdAsync(TModel Tmodel);
         public Task<TModel?> FindByIdAsync(int Id);
 
-        public Task<TModel> InsertAsync(TModel TModel);
-        public Task<TModel> UpdateAsync(TModel TModel);
+        public Task<TModel> InsertAsync(TModel Tmodel);
+        public Task<TModel> UpdateAsync(TModel Tmodel);
 
-        public Task<bool> DeleteAsync(TModel TModel);
+        public Task<bool> DeleteAsync(TModel Tmodel);
 
         IQueryable<TModel> BaseQuery();
 

@@ -1,6 +1,6 @@
 ﻿namespace DataEntity.Pagination
 {
-    public enum PageSizeEnum
+    public enum PageSizeEnm
     {
         SEPULUH = 10,
         DUA_PULUH = 20,

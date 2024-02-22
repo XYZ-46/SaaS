@@ -1,6 +1,6 @@
 ﻿namespace DataEntity.Pagination
 {
-    public enum OperatorEnum
+    public enum OperatorEnm
     {
         None,
 
