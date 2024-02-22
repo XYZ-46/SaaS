@@ -25,7 +25,7 @@ namespace DataEntity.Pagination
         //public static IQueryable<TModel> FilterQuery<TModel>(this IQueryable<TModel> query, SearchCriteria search)
         //{
         //    var param = Expression.Parameter(typeof(TModel));
-        //    var prop = Expression.Property(param, SortField);
+        //    var prop = Expression.Property(param, search.PropertyName);
         //    var exp = Expression.Lambda(prop, param);
 
         //    // Jika sudah ada order
