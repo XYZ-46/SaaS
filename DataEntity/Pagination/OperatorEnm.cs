@@ -6,6 +6,7 @@
 
         Equal,
         NotEqual,
+        Not,
 
         Between,
         NotBetween,
@@ -18,6 +19,18 @@
 
         InSet,
         NotInSet,
+
+        GreaterThan,
+        GreaterThanOrEqual,
+
+        NotGreaterThan,
+        NotGreaterThanOrEqual,
+
+        LessThan,
+        LessThanOrEqual,
+
+        NotLessThan,
+        NotLessThanOrEqual,
 
         Contain,
         NotContain
