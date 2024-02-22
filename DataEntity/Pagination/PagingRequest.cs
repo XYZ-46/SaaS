@@ -35,6 +35,7 @@ namespace DataEntity.Pagination
                     prop = typeof(TModel).GetProperty(itemSearch.PropertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                     var searchErrorList = SearchValidate(itemSearch, prop);
                     if (searchErrorList.Count > 0) errorList.Add("Search", searchErrorList);
+                    else itemSearch.SetOperator();
                 }
             }
 
@@ -61,6 +62,7 @@ namespace DataEntity.Pagination
             }
 
             if (errorList.Count == 0) isValid = true;
+
             return (isValid, errorList);
         }
 
