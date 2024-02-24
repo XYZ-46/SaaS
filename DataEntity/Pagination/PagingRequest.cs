@@ -35,7 +35,6 @@ namespace DataEntity.Pagination
                     prop = typeof(TModel).GetProperty(itemSearch.PropertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
                     var searchErrorList = SearchValidate(itemSearch, prop);
                     if (searchErrorList.Count > 0) errorList.Add("Search", searchErrorList);
-                    else itemSearch.SetOperator();
                 }
             }
 
@@ -74,7 +73,7 @@ namespace DataEntity.Pagination
 
             TypeConverter conv = TypeDescriptor.GetConverter(type);
 
-            if (type.Name == "DateTime")
+            if (type.FullName.Contains("Date"))
             {
                 result = DateTime.TryParseExact(value, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out _);
             }
@@ -117,8 +116,8 @@ namespace DataEntity.Pagination
             }
             if (searchErrorList.Count > 0) return searchErrorList;
 
-
-            if (_search.Operator == "between")
+            if (_search.Operator.Equals("between", StringComparison.OrdinalIgnoreCase)
+                    || _search.Operator.Equals("NotBetween", StringComparison.OrdinalIgnoreCase))
             {
                 if (!string.IsNullOrWhiteSpace(_search.StartValue) && !string.IsNullOrWhiteSpace(_search.EndValue))
                 {
@@ -134,7 +133,6 @@ namespace DataEntity.Pagination
                 if (!CanConvert(_search.Value, prop?.PropertyType))
                     searchErrorList.Add($"[{_search.Value}] is invalid value of type [{prop?.PropertyType.Name}]");
             }
-
 
             return searchErrorList;
         }

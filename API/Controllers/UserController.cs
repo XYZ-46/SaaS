@@ -20,8 +20,9 @@ namespace API.Controllers
         [HttpGet("page")]
         public IActionResult Paging(PagingRequest? pagingRequest)
         {
-
             BaseResponse response = new();
+            pagingRequest ??= new PagingRequest();
+
             var (isValidRequest, errorList) = pagingRequest.ValidateModel<UserProfileModel>();
 
             if (isValidRequest)

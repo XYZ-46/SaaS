@@ -1,4 +1,5 @@
-﻿using DataEntity.Model;
+﻿using DataEntity.Mapper;
+using DataEntity.Model;
 using DataEntity.Pagination;
 using InterfaceProject.Service;
 using InterfaceProject.User;
@@ -51,8 +52,18 @@ namespace Repository.User
         {
             var query = this.BaseQuery();
 
-            // add filter to query
-            pageRequest.Search.ForEach(itemSearch => query = query.FilterQuery(itemSearch));
+            pageRequest.Search.ForEach(itemFilter =>
+            {
+                var search = itemFilter.MapToFilterCriteria();
+
+                if (search.Operator == OperatorEnm.Between)
+                {
+                    var (startFilter, endFilter) = itemFilter.MapToFilterBetweenCriteria();
+                    query = query.FilterQuery(startFilter);
+                    query = query.FilterQuery(endFilter);
+                }
+                else query = query.FilterQuery(search);
+            });
 
             // add order to query
             pageRequest.Sort.ForEach(srt => query = query.OrderByQuery(srt.PropertyNameOrder, srt.IsAscending));

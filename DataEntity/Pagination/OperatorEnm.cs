@@ -29,7 +29,6 @@
         NotLessThanOrEqual,
 
         Between,
-        NotBetween,
 
         InSet,
         NotInSet,
