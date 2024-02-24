@@ -13,6 +13,8 @@ namespace DataEntity.Model
         [EmailAddress(ErrorMessage = "Invalid email format")]
         public string Email { get; set; }
 
+        public DateOnly? Dob { get; set; }
+
         [Required(ErrorMessage = "Fullname is required")]
         public string Fullname { get; set; }
 

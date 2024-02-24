@@ -53,7 +53,7 @@ namespace Repository
             return result;
         }
 
-        public virtual IQueryable<TModel> BaseQuery() => _azureDB.Set<TModel>().AsQueryable();
+        public IQueryable<TModel> BaseQuery() => _azureDB.Set<TModel>().Where(x => !x.IsDelete);
 
     }
 }

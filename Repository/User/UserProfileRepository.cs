@@ -49,7 +49,12 @@ namespace Repository.User
 
         public IQueryable<UserProfileModel> PageQuery(PagingRequest pageRequest)
         {
-            var query = BaseQuery();
+            var query = this.BaseQuery();
+
+            // add filter to query
+            pageRequest.Search.ForEach(itemSearch => query = query.FilterQuery(itemSearch));
+
+            // add order to query
             pageRequest.Sort.ForEach(srt => query = query.OrderByQuery(srt.PropertyNameOrder, srt.IsAscending));
 
             return query;

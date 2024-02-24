@@ -6,33 +6,32 @@
 
         Equal,
         NotEqual,
-        Not,
+
+        Contain,
+        NotContain,
+
+        StartWith,
+        NotStartWith,
+
+        EndWith,
+        NotEndWith,
+
+        GreaterThan,
+        NotGreaterThan,
+
+        GreaterThanOrEqual,
+        NotGreaterThanOrEqual,
+
+        LessThan,
+        NotLessThan,
+
+        LessThanOrEqual,
+        NotLessThanOrEqual,
 
         Between,
         NotBetween,
 
-        StartWith,
-        EndWith,
-
-        NotStartWith,
-        NotEndWith,
-
         InSet,
         NotInSet,
-
-        GreaterThan,
-        GreaterThanOrEqual,
-
-        NotGreaterThan,
-        NotGreaterThanOrEqual,
-
-        LessThan,
-        LessThanOrEqual,
-
-        NotLessThan,
-        NotLessThanOrEqual,
-
-        Contain,
-        NotContain
     }
 }

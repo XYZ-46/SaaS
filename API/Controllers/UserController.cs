@@ -18,7 +18,7 @@ namespace API.Controllers
         }
 
         [HttpGet("page")]
-        public IActionResult Paging(PagingRequest pagingRequest)
+        public IActionResult Paging(PagingRequest? pagingRequest)
         {
 
             BaseResponse response = new();
