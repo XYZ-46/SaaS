@@ -16,13 +16,13 @@ namespace API.Controllers
         }
 
         [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken()
+        public IActionResult RefreshToken()
         {
             return Ok();
         }
 
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword()
+        public IActionResult ForgotPassword()
         {
             return Ok();
         }

@@ -114,24 +114,10 @@ namespace DataEntity.Pagination
                     break;
 
                 case OperatorEnm.NotGreaterThan:
-                    paramExpression = Expression.Not(paramExpression);
-                    break;
-
                 case OperatorEnm.NotGreaterThanOrEqual:
-                    paramExpression = Expression.Not(paramExpression);
-                    break;
-
                 case OperatorEnm.NotLessThan:
-                    paramExpression = Expression.Not(paramExpression);
-                    break;
-
                 case OperatorEnm.NotLessThanOrEqual:
                     paramExpression = Expression.Not(paramExpression);
-                    break;
-
-                case OperatorEnm.InSet:
-                    break;
-                case OperatorEnm.NotInSet:
                     break;
             }
 
