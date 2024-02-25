@@ -22,14 +22,14 @@ namespace DataEntity.Mapper
             var startFilter = new FilterCriteria()
             {
                 PropertyName = search.PropertyName,
-                PropertyValue = search.Value,
+                PropertyValue = search.StartValue,
                 Operator = OperatorEnm.GreaterThanOrEqual
             };
 
             var endFilter = new FilterCriteria()
             {
                 PropertyName = search.PropertyName,
-                PropertyValue = search.Value,
+                PropertyValue = search.EndValue,
                 Operator = OperatorEnm.LessThanOrEqual
             };
 
