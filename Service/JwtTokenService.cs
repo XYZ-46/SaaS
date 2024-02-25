@@ -2,6 +2,7 @@
 using DataEntity;
 using DataEntity.Model;
 using InterfaceProject.Service;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -22,7 +23,7 @@ namespace Service
 
             var Claims = new List<Claim>
             {
-                new(ClaimTypes.Sid, userProfile.UserLogin.Id.ToString()),
+                new(ClaimTypes.Sid, userProfile.Id.ToString()),
                 new(ClaimTypes.Email, userProfile.Email),
                 new(ClaimTypes.Name,   userProfile.Fullname),
             };
@@ -38,9 +39,42 @@ namespace Service
             return new JwtSecurityTokenHandler().WriteToken(SecurityToken);
         }
 
-        public bool ValidateJwtToken(string token)
+        public async Task<bool> ValidateJwtToken(string token)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(token)) return false;
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var SecretKey = Encoding.ASCII.GetBytes(_jwtSetting.Secret);
+
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(SecretKey),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = _jwtSetting.Issuer,
+                    ValidAudience = _jwtSetting.Audience,
+                    RequireSignedTokens = true,
+                    RequireExpirationTime = true,
+                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                    ClockSkew = TimeSpan.Zero
+
+                }, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+
+                // return user id from JWT token if validation successful
+                return true;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("Invalid Token");
+            }
+
         }
 
         public static RefreshToken GenerateRefreshToken(string ipAddress)

@@ -2,6 +2,7 @@
 using DataEntity.Pagination;
 using DataEntity.Request;
 using InterfaceProject.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -18,6 +19,7 @@ namespace API.Controllers
         }
 
         [HttpGet("page")]
+        [Authorize]
         public IActionResult Paging(PagingRequest? pagingRequest)
         {
             BaseResponse response = new();

@@ -11,8 +11,8 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest userLoginParamReq)
         {
-            string token = await _authService.Login(userLoginParamReq);
-            return Ok(new { token });
+            String token = await _authService.Login(userLoginParamReq);
+            return Ok(new BaseResponse { data = token });
         }
 
         [HttpPost("refresh-token")]

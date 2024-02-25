@@ -1,4 +1,5 @@
 using API.Logger;
+using API.Middleware;
 using AppConfiguration;
 using DataEntity;
 using InterfaceProject.Service;
@@ -92,13 +93,15 @@ namespace API
                         .Enrich.WithProperty("ApplicationName", _config.GetSection("ApplicationName").Value)
                         .WriteTo.SinkRabbitMQ(rabbitMQService: service.GetRequiredService<IRabbitMQService>(), IsProduction: ASPNETCORE_ENVIRONMENT == "production");
                 });
+                builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
             }
 
             var app = builder.Build();
             { // App Builder
                 app.UseMiddleware<LoggerReqHttp>();
                 app.UseMiddleware<LoggerRespHttp>();
-                app.UseMiddleware<ErrorHandler>();
+                app.UseMiddleware<JwtMidlleware>();
                 app.Use(async (context, next) =>
                 {
                     await next();
@@ -135,6 +138,8 @@ namespace API
                 app.UseHttpsRedirection();
                 app.UseAuthorization();
                 app.MapControllers();
+
+                app.UseExceptionHandler(_ => { });
 
                 app.Run();
             }

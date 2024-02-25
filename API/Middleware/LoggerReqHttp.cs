@@ -2,7 +2,7 @@
 using Serilog;
 using System.Text.Json;
 
-namespace API.Logger
+namespace API.Middleware
 {
     public class LoggerReqHttp(RequestDelegate next)
     {

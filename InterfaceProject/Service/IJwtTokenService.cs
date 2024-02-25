@@ -4,7 +4,7 @@ namespace InterfaceProject.Service
 {
     public interface IJwtTokenService
     {
-        public string GenerateJwtToken(UserProfileModel userProfile);
-        public bool ValidateJwtToken(string token);
+        string GenerateJwtToken(UserProfileModel userProfile);
+        Task<bool> ValidateJwtToken(string token);
     }
 }

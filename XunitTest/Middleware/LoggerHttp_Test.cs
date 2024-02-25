@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using API.Middleware;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Serilog;
 using Serilog.Sinks.TestCorrelator;
-using API.Logger;
 
 namespace XunitTest.Middleware
 {
