@@ -2,7 +2,6 @@
 using DataEntity;
 using DataEntity.Model;
 using InterfaceProject.Service;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -39,41 +38,34 @@ namespace Service
             return new JwtSecurityTokenHandler().WriteToken(SecurityToken);
         }
 
-        public async Task<bool> ValidateJwtToken(string token)
+        public (bool, int) ValidateJwtToken(string token)
         {
-            if (string.IsNullOrWhiteSpace(token)) return false;
+            if (string.IsNullOrWhiteSpace(token)) throw new ArgumentException("Invalid Token");
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var SecretKey = Encoding.ASCII.GetBytes(_jwtSetting.Secret);
-
-            try
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
             {
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(SecretKey),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidIssuer = _jwtSetting.Issuer,
-                    ValidAudience = _jwtSetting.Audience,
-                    RequireSignedTokens = true,
-                    RequireExpirationTime = true,
-                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
-                    ClockSkew = TimeSpan.Zero
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(SecretKey),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidIssuer = _jwtSetting.Issuer,
+                ValidAudience = _jwtSetting.Audience,
+                RequireSignedTokens = true,
+                RequireExpirationTime = true,
+                // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                ClockSkew = TimeSpan.Zero
 
-                }, out SecurityToken validatedToken);
+            }, out SecurityToken validatedToken);
 
-                var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+            var jwtToken = (JwtSecurityToken)validatedToken;
 
-                // return user id from JWT token if validation successful
-                return true;
-            }
-            catch (Exception)
-            {
-                throw new ArgumentException("Invalid Token");
-            }
+            _ = int.TryParse(jwtToken.Claims.First(x => x.Type == "id").Value, out int userID);
+
+            if (userID > 0) return (true, userID);
+            else throw new ArgumentException("Invalid Token");
 
         }
 

@@ -6,6 +6,7 @@ namespace InterfaceProject.User
 {
     public interface IUserService
     {
+        Task<UserProfileModel?> FindUserByID(int id);
         Task Register(UserRegisterRequest userRegisterParam);
         PagingResponse<UserProfileModel> GetPagingData(PagingRequest pageRequest);
     }

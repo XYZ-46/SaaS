@@ -35,7 +35,7 @@ namespace API
                 .Build();
 
             var builder = WebApplication.CreateBuilder(args);
-            { // Service
+            { // Service               
                 builder.Services.AddSwaggerGen();
 
                 var _jwtSetting = _config.GetSection("JwtSetting").Get<JwtSetting>();
@@ -43,7 +43,6 @@ namespace API
                 builder.Services.RegisterDIServices(_config);
                 builder.Services.RegisterDIRepository();
                 builder.Services.RegisterDIEntity();
-                builder.Services.AddScoped<BaseResponse>();
 
                 builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters()
@@ -57,6 +56,7 @@ namespace API
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSetting.Secret))
                     });
 
+                builder.Services.AddAuthorization();
                 builder.Services.AddDbContext<AzureDB>(options => options.UseSqlServer(_config.GetSection("Database:Azure").Value));
                 builder.Services.AddControllers()
                     .AddJsonOptions(opt =>
@@ -93,12 +93,16 @@ namespace API
                         .Enrich.WithProperty("ApplicationName", _config.GetSection("ApplicationName").Value)
                         .WriteTo.SinkRabbitMQ(rabbitMQService: service.GetRequiredService<IRabbitMQService>(), IsProduction: ASPNETCORE_ENVIRONMENT == "production");
                 });
+
                 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+                builder.Services.AddProblemDetails();
 
             }
 
             var app = builder.Build();
             { // App Builder
+                app.UseExceptionHandler((_ => { }));
+
                 app.UseMiddleware<LoggerReqHttp>();
                 app.UseMiddleware<LoggerRespHttp>();
                 app.UseMiddleware<JwtMidlleware>();
@@ -138,8 +142,6 @@ namespace API
                 app.UseHttpsRedirection();
                 app.UseAuthorization();
                 app.MapControllers();
-
-                app.UseExceptionHandler(_ => { });
 
                 app.Run();
             }

@@ -1,32 +1,32 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
+using System.Text.Json;
 
 namespace API.Middleware
 {
     public class GlobalExceptionHandler : IExceptionHandler
     {
-        public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
+        public ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            if (exception is null) return false;
-
-            var response = new BaseResponse()
-            {
-                errorMessage = exception.Message,
-            };
+            if (exception is null) return ValueTask.FromResult(false);
 
             switch (exception)
             {
                 case ArgumentException:
-                    httpContext.Response.StatusCode = 400;
-                    await httpContext.Response.WriteAsJsonAsync(response, cancellationToken);
+                case HttpRequestException:
+                    BaseResponse response = new();
+                    httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                    response.errorMessage = exception.Message;
+                    httpContext.Response.WriteAsJsonAsync(exception.Message, cancellationToken).ConfigureAwait(false);
                     break;
                 default:
-                    httpContext.Response.StatusCode = 500;
-                    response.errorMessage = "Internal server Error";
-                    await httpContext.Response.WriteAsJsonAsync(response, cancellationToken);
+                    response = new BaseResponse();
+                    httpContext.Response.StatusCode = StatusCodes.Status506VariantAlsoNegotiates;
+                    response.errorMessage = "Undefined server Error";
+                    httpContext.Response.WriteAsJsonAsync(JsonSerializer.Serialize(response), cancellationToken);
                     break;
             }
 
-            return true;
+            return ValueTask.FromResult(true);
         }
     }
 }

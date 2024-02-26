@@ -41,6 +41,8 @@ namespace Service
             }
         }
 
+        public async Task<UserProfileModel?> FindUserByID(int id) => await _userProfileRepo.FindByIdAsync(id);
+
         public PagingResponse<UserProfileModel> GetPagingData(PagingRequest pageRequest) => _userProfileRepo.PageData(pageRequest);
 
     }
