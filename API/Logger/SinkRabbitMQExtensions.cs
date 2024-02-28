@@ -1,6 +1,6 @@
-﻿using Serilog.Configuration;
+﻿using InterfaceProject.Service;
 using Serilog;
-using InterfaceProject.Service;
+using Serilog.Configuration;
 
 namespace API.Logger
 {

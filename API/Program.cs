@@ -37,6 +37,8 @@ namespace API
             var builder = WebApplication.CreateBuilder(args);
             { // Service               
                 builder.Services.AddSwaggerGen();
+                builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+                builder.Services.AddProblemDetails();
 
                 var _jwtSetting = _config.GetSection("JwtSetting").Get<JwtSetting>();
 
@@ -44,9 +46,10 @@ namespace API
                 builder.Services.RegisterDIRepository();
                 builder.Services.RegisterDIEntity();
 
-                builder.Services.AddTransient<LoggerReqHttp>();
+                builder.Services.AddTransient<RequestResponseLogger>();
+                //builder.Services.AddTransient<LoggerReqHttp>();
+                //builder.Services.AddTransient<LoggerResponseHttp>();
                 builder.Services.AddTransient<JwtMidlleware>();
-                //builder.Services.AddTransient<LoggerRespHttp>();
 
                 builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters()
@@ -98,17 +101,15 @@ namespace API
                         .WriteTo.SinkRabbitMQ(rabbitMQService: service.GetRequiredService<IRabbitMQService>(), IsProduction: ASPNETCORE_ENVIRONMENT == "production");
                 });
 
-                builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-                builder.Services.AddProblemDetails();
-
             }
 
             var app = builder.Build();
             { // App Builder
                 app.UseExceptionHandler(_ => { });
 
-                app.UseMiddleware<LoggerReqHttp>();
-                //app.UseMiddleware<LoggerRespHttp>();
+                app.UseMiddleware<RequestResponseLogger>();
+                //app.UseMiddleware<LoggerReqHttp>();
+                //app.UseMiddleware<LoggerResponseHttp>();
                 app.UseMiddleware<JwtMidlleware>();
                 //app.Use(async (context, next) =>
                 //{
