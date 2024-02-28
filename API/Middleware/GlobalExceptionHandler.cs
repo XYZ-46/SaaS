@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using System.Text.Json;
+using System.Security.Authentication;
 
 namespace API.Middleware
 {
@@ -9,23 +9,22 @@ namespace API.Middleware
         {
             if (exception is null) return false;
 
+            httpContext.Response.ContentType = System.Net.Mime.MediaTypeNames.Application.Json;
+            BaseResponse resp = new();
+
             switch (exception)
             {
                 case ArgumentException:
                 case HttpRequestException:
-                    BaseResponse response = new();
+                case AuthenticationException:
+                    resp.errorMessage = exception.Message;
                     httpContext.Response.StatusCode = StatusCodes.Status417ExpectationFailed;
-                    response.errorMessage = exception.Message;
-                    await Task.Run(() =>
-                    {
-                        _ = httpContext.Response.WriteAsJsonAsync(response, cancellationToken);
-                    }, cancellationToken);
+                    await httpContext.Response.WriteAsJsonAsync(resp, cancellationToken: cancellationToken);
                     break;
                 default:
-                    response = new BaseResponse();
-                    httpContext.Response.StatusCode = StatusCodes.Status506VariantAlsoNegotiates;
-                    response.errorMessage = "Undefined server Error";
-                    await httpContext.Response.WriteAsJsonAsync(JsonSerializer.Serialize(response), cancellationToken);
+                    httpContext.Response.StatusCode = StatusCodes.Status501NotImplemented;
+                    resp.errorMessage = "Undefined Error";
+                    await httpContext.Response.WriteAsJsonAsync(resp, cancellationToken: cancellationToken);
                     break;
             }
 

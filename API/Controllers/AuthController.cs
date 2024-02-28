@@ -12,7 +12,7 @@ namespace API.Controllers
         public async Task<IActionResult> Login(LoginRequest userLoginParamReq)
         {
             String token = await _authService.Login(userLoginParamReq);
-            return Ok(new BaseResponse { data = token });
+            return Ok(new BaseResponse { data = new { token } });
         }
 
         [HttpPost("refresh-token")]

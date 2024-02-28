@@ -4,15 +4,14 @@ using System.Text.Json;
 
 namespace API.Middleware
 {
-    public class LoggerReqHttp(RequestDelegate next)
+    public class LoggerReqHttp : IMiddleware
     {
         private readonly RecyclableMemoryStreamManager _recyclableMem = new();
-        private readonly RequestDelegate _next = next;
 
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             await LogRequest(context);
-            await this._next(context);
+            await next(context);
         }
 
         private async Task LogRequest(HttpContext context)

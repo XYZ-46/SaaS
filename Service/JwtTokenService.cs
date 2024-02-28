@@ -22,9 +22,9 @@ namespace Service
 
             var Claims = new List<Claim>
             {
-                new(ClaimTypes.Sid, userProfile.Id.ToString()),
-                new(ClaimTypes.Email, userProfile.Email),
-                new(ClaimTypes.Name,   userProfile.Fullname),
+                new("UserID", userProfile.Id.ToString()),
+                new("Email", userProfile.Email),
+                new("Fullname", userProfile.Fullname),
             };
 
             var SecurityToken = new JwtSecurityToken(
@@ -62,7 +62,7 @@ namespace Service
 
             var jwtToken = (JwtSecurityToken)validatedToken;
 
-            _ = int.TryParse(jwtToken.Claims.First(x => x.Type == "id").Value, out int userID);
+            _ = int.TryParse(jwtToken.Claims.SingleOrDefault(x => x.Type == "UserID")?.Value, out int userID);
 
             if (userID > 0) return (true, userID);
             else throw new ArgumentException("Invalid Token");

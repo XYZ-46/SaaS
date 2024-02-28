@@ -3,24 +3,25 @@ using InterfaceProject.User;
 
 namespace API.Middleware
 {
-    public class JwtMidlleware(RequestDelegate next)
+    public class JwtMidlleware(IUserService userService, IJwtTokenService jwtService) : IMiddleware
     {
-        private readonly RequestDelegate _next = next;
-
-        public async Task Invoke(HttpContext context, IUserService userService, IJwtTokenService jwtService)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            var token = context.Request.Headers.Authorization.SingleOrDefault()?.Split(" ").LastOrDefault() ?? throw new ArgumentException("Invalid Token");
+            var token = context.Request.Headers.Authorization.SingleOrDefault()?.Split(" ").LastOrDefault();
 
-            var (isValidToken, userID) = jwtService.ValidateJwtToken(token!);
-
-            if (isValidToken)
+            if (!string.IsNullOrWhiteSpace(token))
             {
-                // attach user to context on successful jwt validation
-                var user = await userService.FindUserByID(userID) ?? throw new ArgumentException("Can not find user");
-                context.Items["User"] = user;
+                var (isValidToken, userID) = jwtService.ValidateJwtToken(token!);
+
+                if (isValidToken)
+                {
+                    // attach user to context on successful jwt validation
+                    var user = await userService.FindUserByID(userID) ?? throw new ArgumentException("Can not find user");
+                    context.Items["User"] = user;
+                }
             }
 
-            await this._next(context);
+            await next(context);
         }
     }
 }

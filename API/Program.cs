@@ -44,6 +44,10 @@ namespace API
                 builder.Services.RegisterDIRepository();
                 builder.Services.RegisterDIEntity();
 
+                builder.Services.AddTransient<LoggerReqHttp>();
+                builder.Services.AddTransient<JwtMidlleware>();
+                //builder.Services.AddTransient<LoggerRespHttp>();
+
                 builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters()
                     {
@@ -101,34 +105,34 @@ namespace API
 
             var app = builder.Build();
             { // App Builder
-                app.UseExceptionHandler((_ => { }));
+                app.UseExceptionHandler(_ => { });
 
                 app.UseMiddleware<LoggerReqHttp>();
-                app.UseMiddleware<LoggerRespHttp>();
+                //app.UseMiddleware<LoggerRespHttp>();
                 app.UseMiddleware<JwtMidlleware>();
-                app.Use(async (context, next) =>
-                {
-                    await next();
+                //app.Use(async (context, next) =>
+                //{
+                //    await next();
 
-                    // Handle the 415 response
-                    if (context.Response.StatusCode == 415)
-                    {
-                        context.Response.Clear();
-                        BaseResponse respon = new()
-                        {
-                            errorMessage = "Unsupported Media Type"
-                        };
-                        context.Response.StatusCode = 415;
-                        context.Response.ContentType = "application/json";
+                //    // Handle the 415 response
+                //    if (context.Response.StatusCode == 415)
+                //    {
+                //        context.Response.Clear();
+                //        BaseResponse respon = new()
+                //        {
+                //            errorMessage = "Unsupported Media Type"
+                //        };
+                //        context.Response.StatusCode = 415;
+                //        context.Response.ContentType = "application/json";
 
-                        var json = JsonSerializer.Serialize(respon);
-                        await context.Response.WriteAsync(json);
-                    }
-                });
+                //        var json = JsonSerializer.Serialize(respon);
+                //        await context.Response.WriteAsync(json);
+                //    }
+                //});
 
                 if (!app.Environment.IsEnvironment("Production"))
                 {
-                    app.UseDeveloperExceptionPage();
+                    //app.UseDeveloperExceptionPage();
                     app.UseSwagger();
                     app.UseSwaggerUI();
                 }
