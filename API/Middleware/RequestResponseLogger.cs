@@ -9,24 +9,10 @@ namespace API.Middleware
     {
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            //try
-            //{
-
-            EndpointMetadataCollection endpointMetaData = context.Features.Get<IEndpointFeature>()?.Endpoint.Metadata;
-
             context.Request.EnableBuffering();
 
             await LogRequest(context);
             await LogResponse(context, next);
-            //}
-            //catch (UnauthorizedAccessException)
-            //{
-            //    throw;
-            //}
-            //catch (Exception ex)
-            //{
-            //    //Custom exception logging here
-            //}
         }
 
         public async Task LogRequest(HttpContext context)
@@ -77,27 +63,22 @@ namespace API.Middleware
             try
             {
 
-                using (var memStream = new MemoryStream())
-                {
-                    context.Response.Body = memStream;
+                using var memStream = new MemoryStream();
+                context.Response.Body = memStream;
 
-                    await _next(context);
+                await _next(context);
 
-                    memStream.Position = 0;
-                    string responseBody = new StreamReader(memStream).ReadToEnd();
+                memStream.Position = 0;
+                string responseBody = new StreamReader(memStream).ReadToEnd();
 
-                    //auditLog.ResponseStatusCode = context.Response.StatusCode;
-                    //auditLog.ResponseBody = responseBody;
-                    //auditLog = auditLog.Save();
-                    Log
-                        .ForContext("InfoType", "UserResponse")
-                        .ForContext("RespBody", responseBody)
-                        .ForContext("StatusCode", context.Response.StatusCode)
-                        .Information("Response Http");
+                Log
+                    .ForContext("InfoType", "UserResponse")
+                    .ForContext("RespBody", responseBody)
+                    .ForContext("StatusCode", context.Response.StatusCode)
+                    .Information("Response Http");
 
-                    memStream.Position = 0;
-                    await memStream.CopyToAsync(originalBody);
-                }
+                memStream.Position = 0;
+                await memStream.CopyToAsync(originalBody);
             }
             //catch
             //{

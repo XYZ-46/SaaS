@@ -38,6 +38,7 @@ namespace API
             { // Service               
                 builder.Services.AddSwaggerGen();
                 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+                builder.Services.AddExceptionHandler<LoggerResponseExceptionHandler>();
                 builder.Services.AddProblemDetails();
 
                 var _jwtSetting = _config.GetSection("JwtSetting").Get<JwtSetting>();
@@ -47,8 +48,6 @@ namespace API
                 builder.Services.RegisterDIEntity();
 
                 builder.Services.AddTransient<RequestResponseLogger>();
-                //builder.Services.AddTransient<LoggerReqHttp>();
-                //builder.Services.AddTransient<LoggerResponseHttp>();
                 builder.Services.AddTransient<JwtMidlleware>();
 
                 builder.Services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
@@ -108,8 +107,6 @@ namespace API
                 app.UseExceptionHandler(_ => { });
 
                 app.UseMiddleware<RequestResponseLogger>();
-                //app.UseMiddleware<LoggerReqHttp>();
-                //app.UseMiddleware<LoggerResponseHttp>();
                 app.UseMiddleware<JwtMidlleware>();
                 //app.Use(async (context, next) =>
                 //{

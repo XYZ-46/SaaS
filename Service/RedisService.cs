@@ -11,9 +11,8 @@ namespace Service
         public RedisService(string connectionString)
         {
             var lazyConnection = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect(connectionString));
-            RedisDb = lazyConnection.Value.GetDatabase();
+            RedisDb = lazyConnection.Value.GetDatabase() ?? throw new ArgumentNullException("The provided redisDbProvider or its database is null");
 
-            if (this.RedisDb == null) throw new ArgumentNullException("The provided redisDbProvider or its database is null");
         }
 
         public async Task<T?> GetDataAsync<T>(string key)

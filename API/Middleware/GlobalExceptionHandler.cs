@@ -28,7 +28,7 @@ namespace API.Middleware
                     break;
             }
 
-            return true;
+            return false;
         }
     }
 }
