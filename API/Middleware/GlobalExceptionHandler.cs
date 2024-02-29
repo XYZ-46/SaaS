@@ -10,7 +10,8 @@ namespace API.Middleware
             if (exception is null) return false;
 
             httpContext.Response.ContentType = System.Net.Mime.MediaTypeNames.Application.Json;
-            BaseResponse resp = new();
+            var resp = new BaseResponse();
+            httpContext.Response.ContentType = "application/json";
 
             switch (exception)
             {
@@ -19,14 +20,19 @@ namespace API.Middleware
                 case AuthenticationException:
                     resp.errorMessage = exception.Message;
                     httpContext.Response.StatusCode = StatusCodes.Status417ExpectationFailed;
-                    await httpContext.Response.WriteAsJsonAsync(resp, cancellationToken: cancellationToken);
+                    break;
+
+                case System.ComponentModel.DataAnnotations.ValidationException:
+                case FluentValidation.ValidationException:
+                    if (httpContext.Response.StatusCode == 415) resp.errorMessage = "Invalid Json format";
+
                     break;
                 default:
                     httpContext.Response.StatusCode = StatusCodes.Status501NotImplemented;
                     resp.errorMessage = "Undefined Error";
-                    await httpContext.Response.WriteAsJsonAsync(resp, cancellationToken: cancellationToken);
                     break;
             }
+            await httpContext.Response.WriteAsJsonAsync(resp, cancellationToken: cancellationToken);
 
             return false;
         }

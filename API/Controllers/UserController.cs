@@ -1,4 +1,5 @@
-﻿using DataEntity.Model;
+﻿using API.Authorization;
+using DataEntity.Model;
 using DataEntity.Pagination;
 using DataEntity.Request;
 using InterfaceProject.User;
@@ -19,7 +20,7 @@ namespace API.Controllers
         }
 
         [HttpGet("page")]
-        [Authorize]
+        [AllMember]
         public IActionResult Paging(PagingRequest? pagingRequest)
         {
             BaseResponse response = new();

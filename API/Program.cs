@@ -108,25 +108,25 @@ namespace API
 
                 app.UseMiddleware<RequestResponseLogger>();
                 app.UseMiddleware<JwtMidlleware>();
-                //app.Use(async (context, next) =>
-                //{
-                //    await next();
+                app.Use(async (context, next) =>
+                {
+                    await next();
 
-                //    // Handle the 415 response
-                //    if (context.Response.StatusCode == 415)
-                //    {
-                //        context.Response.Clear();
-                //        BaseResponse respon = new()
-                //        {
-                //            errorMessage = "Unsupported Media Type"
-                //        };
-                //        context.Response.StatusCode = 415;
-                //        context.Response.ContentType = "application/json";
+                    // Handle the 415 response
+                    if (context.Response.StatusCode == 415)
+                    {
+                        context.Response.Clear();
+                        BaseResponse respon = new()
+                        {
+                            errorMessage = "Unsupported Media Type"
+                        };
+                        context.Response.StatusCode = 415;
+                        context.Response.ContentType = "application/json";
 
-                //        var json = JsonSerializer.Serialize(respon);
-                //        await context.Response.WriteAsync(json);
-                //    }
-                //});
+                        var json = JsonSerializer.Serialize(respon);
+                        await context.Response.WriteAsync(json);
+                    }
+                });
 
                 if (!app.Environment.IsEnvironment("Production"))
                 {

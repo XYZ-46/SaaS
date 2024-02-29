@@ -56,19 +56,13 @@ namespace Service
             _channel.QueueBind(_messageConfig.Queue, _messageConfig.ExchangeName, _messageConfig.RouteKey);
         }
 
-        public void PushMessageIntoQueue(byte[] message)
-        {
+        public void PushMessageIntoQueue(byte[] message) =>
             _channel.BasicPublish(_messageConfig.ExchangeName, _messageConfig.RouteKey, null, message);
-        }
 
-        public void PushMessageIntoQueue(string message)
-        {
+        public void PushMessageIntoQueue(string message) =>
             _channel.BasicPublish(_messageConfig.ExchangeName, _messageConfig.RouteKey, null, Encoding.UTF8.GetBytes(message));
-        }
 
-        public void PushMessageIntoQueue<T>(T message)
-        {
+        public void PushMessageIntoQueue<T>(T message) =>
             _channel.BasicPublish(_messageConfig.ExchangeName, _messageConfig.RouteKey, null, Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message)));
-        }
     }
 }

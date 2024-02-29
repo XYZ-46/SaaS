@@ -1,5 +1,4 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Serilog;
 
 namespace API.Middleware

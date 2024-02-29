@@ -1,10 +1,11 @@
 ﻿using InterfaceProject.Service;
 using Serilog.Core;
 using Serilog.Events;
+using System.Text.Json;
 
 namespace API.Logger
 {
-    public class SinkRabbitMQ(IRabbitMQService rabbitMQService, IFormatProvider formatProvider, bool IsProduction )
+    public class SinkRabbitMQ(IRabbitMQService rabbitMQService, IFormatProvider formatProvider, bool IsProduction)
                 : ILogEventSink
     {
         private readonly IFormatProvider _formatProvider = formatProvider;
@@ -24,7 +25,8 @@ namespace API.Logger
             foreach (var properti in logEvent.Properties) objLog.Add(properti.Key, properti.Value.ToString().Trim('"'));
             objLog.Add("message", logEvent.RenderMessage(_formatProvider));
 
-            _rabbitMQService.PushMessageIntoQueue(objLog);
+            string strLogContext = JsonSerializer.Serialize(objLog).RemoveJsonWhitespace();
+            _rabbitMQService.PushMessageIntoQueue(strLogContext);
 
             if (!IsProduction)
             {
