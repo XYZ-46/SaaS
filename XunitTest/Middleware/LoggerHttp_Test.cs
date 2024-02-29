@@ -18,12 +18,12 @@ namespace XunitTest.Middleware
                 Log.Logger = logger;
 
             HttpContext ctx = new DefaultHttpContext();
-            static Task next(HttpContext hc) => Task.CompletedTask;
+            //static Task next(HttpContext hc) => Task.CompletedTask;
 
             // Act
-            var mw = new LoggerReqHttp(next);
+            var mw = new RequestResponseLogger();
             ctx.Request.Headers.UserAgent = "Some Value";
-            await mw.Invoke(ctx);
+            await mw.LogRequest(ctx);
 
             //Assert
             ctx.Request.Headers.TryGetValue("User-Agent", out var value1).Should().Be(true);
@@ -59,9 +59,9 @@ namespace XunitTest.Middleware
             static Task next(HttpContext hc) => Task.CompletedTask;
 
             // Act
-            var mw = new LoggerRespHttp(next);
+            var mw = new RequestResponseLogger();
             ctx.Request.Headers.UserAgent = "Some Value";
-            await mw.Invoke(ctx);
+            await mw.LogResponse(ctx, next);
 
             //Assert
             ctx.Request.Headers.TryGetValue("User-Agent", out var value1).Should().Be(true);

@@ -17,10 +17,10 @@ namespace API.Middleware
 
         public async Task LogRequest(HttpContext context)
         {
-            IHttpRequestFeature features = context.Features.Get<IHttpRequestFeature>();
+            IHttpRequestFeature? features = context.Features.Get<IHttpRequestFeature>();
             string url = $"{features?.Scheme}://{context.Request.Host.Value}{features?.RawTarget}";
 
-            IFormCollection form = null;
+            IFormCollection? form = null;
             string formString = string.Empty;
 
             if (context.Request.HasFormContentType) form = context.Request.Form;
@@ -46,14 +46,6 @@ namespace API.Middleware
               .ForContext("ReqBody", formString)
               .Information("Request Http");
 
-            //return new Logging.AuditLog()
-            //{
-            //    RemoteHost = context.Connection.RemoteIpAddress.ToString(),
-            //    HttpURL = url,
-            //    LocalAddress = context.Connection.LocalIpAddress.ToString(),
-            //    Headers = Newtonsoft.Json.JsonConvert.SerializeObject(context.Request.Headers),
-            //    Form = form != null ? Newtonsoft.Json.JsonConvert.SerializeObject(form) : formString
-            //};
         }
 
         public async Task LogResponse(HttpContext context, RequestDelegate _next)
@@ -80,11 +72,6 @@ namespace API.Middleware
                 memStream.Position = 0;
                 await memStream.CopyToAsync(originalBody);
             }
-            //catch
-            //{
-            //    auditLog?.Save();
-            //    throw;
-            //}
             finally
             {
                 context.Response.Body = originalBody;
