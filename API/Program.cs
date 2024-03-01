@@ -141,6 +141,7 @@ namespace API
                     .ForContext("app.Environment.ApplicationName", app.Environment.ApplicationName)
                     .Information("Program Start");
 
+                app.UseHsts();
                 app.UseHttpsRedirection();
                 app.UseAuthorization();
                 app.MapControllers();
